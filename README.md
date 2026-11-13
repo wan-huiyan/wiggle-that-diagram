@@ -78,9 +78,9 @@ The demo sources and the exact rebuild commands are in [`demos/`](demos/README.m
 bash scripts/check.sh
 ```
 
-Runs on every push and pull request (the **tests** badge above), 8 checks: every shipped script parses (JavaScript,
+Runs on every push and pull request (the **tests** badge above), 9 checks: every shipped script parses (JavaScript,
 Python, bash), the pacing checker passes on the example caption scripts, the live style rebuilds
-`demos/final/pizza.html` byte for byte, and the version agrees in all three places it is written. The browser
+`demos/final/pizza.html` and `demos/final/expenses.html` byte for byte, and the version agrees in all three places it is written. The browser
 contract tests (the skill's `scripts/style-*/test_contract.py`) need Chrome and are run by hand.
 
 ## 🙈 Limitations

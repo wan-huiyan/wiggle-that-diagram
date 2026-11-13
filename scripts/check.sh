@@ -41,13 +41,17 @@ check "bash -n style-a/make.sh" bash -n $WIG/scripts/style-a/make.sh
 check "pace_check.py on beats.example.json" "$PY" $WIG/scripts/common/pace_check.py $WIG/scripts/common/beats.example.json
 check "pace_check.py on the pizza demo beats" "$PY" $WIG/scripts/common/pace_check.py $WIG/examples/pizza/beats.json
 check "pace_check.py on the expenses demo beats" "$PY" $WIG/scripts/common/pace_check.py $WIG/examples/expenses/beats.json
+# style_c_rebuild NAME [CSS] -> build the example's live film and compare with the published one, byte for byte.
 style_c_rebuild() {
-  local E=$WIG/examples/pizza out
-  out=$("$PY" $WIG/scripts/style-c/build.py $E/beats.json --src $E/style-c --out "$TMP/c" --css $E/style-c/theme.css 2>&1) || { fail "style C rebuild of pizza" "$(printf '%s\n' "$out" | tail -6)"; return; }
-  if cmp -s "$TMP/c/pizza.html" demos/final/pizza.html; then pass "style C build.py rebuilds demos/final/pizza.html byte for byte"
-  else fail "style C rebuild differs from demos/final/pizza.html (rebuild the demo or fix the builder)"; fi
+  local name=$1 E=$WIG/examples/$1 out
+  if [ -n "${2:-}" ]; then out=$("$PY" $WIG/scripts/style-c/build.py $E/beats.json --src $E/style-c --out "$TMP/$name" --css "$E/style-c/$2" 2>&1)
+  else out=$("$PY" $WIG/scripts/style-c/build.py $E/beats.json --src $E/style-c --out "$TMP/$name" 2>&1); fi
+  if [ $? -ne 0 ]; then fail "style C rebuild of $name" "$(printf '%s\n' "$out" | tail -6)"; return; fi
+  if cmp -s "$TMP/$name/$name.html" demos/final/$name.html; then pass "style C build.py rebuilds demos/final/$name.html byte for byte"
+  else fail "style C rebuild differs from demos/final/$name.html (rebuild the demo or fix the builder)"; fi
 }
-style_c_rebuild
+style_c_rebuild pizza theme.css
+style_c_rebuild expenses            # default theme, no --css
 
 # The version lives in three places; they must agree.
 versions() { "$PY" - <<'PY'
