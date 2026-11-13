@@ -22,11 +22,11 @@
 One caption script feeds all three, so a switcher compares styles, not content.
 [**Watch the live films →**](https://wan-huiyan.github.io/wiggle-that-diagram/) (two made-up examples, three styles each)
 
-| Style | Looks like | Made with | Pizza film size |
-|---|---|---|---|
-| **Diagram clip** | a clean, 3Blue1Brown-style diagram; labels stay sharp | huashu-art-motion engine → text-free video + HTML labels | 423 KB |
-| **Whiteboard** | someone explaining at a whiteboard, hand-lettered | huashu-art-motion's whiteboard grammar → square video | 513 KB |
-| **Live** | a polished product animation | inline SVG + GSAP with a virtual camera | 21 KB |
+| Style | Looks like | Made with | Watch: expense claim | Watch: pizza order |
+|---|---|---|---|---|
+| **Diagram clip** | a clean, 3Blue1Brown-style diagram; labels stay sharp | huashu-art-motion engine → text-free video + HTML labels | [film](https://wan-huiyan.github.io/wiggle-that-diagram/expenses-diagram.html) · 435 KB | [film](https://wan-huiyan.github.io/wiggle-that-diagram/pizza-diagram.html) · 423 KB |
+| **Whiteboard** | someone explaining at a whiteboard, hand-lettered | huashu-art-motion's whiteboard grammar → square video | [film](https://wan-huiyan.github.io/wiggle-that-diagram/expenses-whiteboard.html) · 818 KB | [film](https://wan-huiyan.github.io/wiggle-that-diagram/pizza-whiteboard.html) · 513 KB |
+| **Live** | a polished product animation | inline SVG + GSAP with a virtual camera | [film](https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html) · 23 KB | [film](https://wan-huiyan.github.io/wiggle-that-diagram/pizza.html) · 21 KB |
 
 <p align="center">
   <a href="https://wan-huiyan.github.io/wiggle-that-diagram/pizza.html"><img src="demos/pizza.gif" width="640" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a>
