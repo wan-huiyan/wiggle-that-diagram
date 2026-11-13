@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.3.0"
+  version: "1.3.1"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---

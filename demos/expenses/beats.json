@@ -1,5 +1,5 @@
 {
- "_doc": "Caption script for the second neutral wiggle-that-diagram demo: how an expense claim gets checked. Every name, amount and rule is made up. Format: plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts/common/beats.example.json.",
+ "_doc": "Caption script for the second neutral wiggle-that-diagram demo: how an expense claim gets checked. Every name, amount and rule is made up. Format: skills/wiggle-that-diagram/scripts/common/beats.example.json.",
  "expenses": {
   "title": "How an expense claim gets checked",
   "alt": "Animation in six steps. Ana photographs three receipts from a work trip: hotel 180 dollars, client dinner 95 dollars, taxi 40 dollars. Written rules check each receipt against the expense policy. The hotel is green, under the limit. The dinner is amber, over the 60 dollar meal limit, so a manager decides. The taxi is red, with no receipt photo, so it goes back to Ana. Her manager approves the dinner with a note. The approved lines fill the expense report, 275 dollars in total. Finance pays 275 dollars into Ana's account on Friday.",

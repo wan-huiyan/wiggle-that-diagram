@@ -1,7 +1,7 @@
 # wiggle-that-diagram demos
 
-Two made-up examples for the [`wiggle-that-diagram`](../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/SKILL.md)
-skill, each in all three styles. Live, with a switcher (whiteboard first): <https://wan-huiyan.github.io/cutify-this/wiggle/>
+Two made-up examples for the [`wiggle-that-diagram`](../skills/wiggle-that-diagram/SKILL.md)
+skill, each in all three styles. Live, with a switcher (whiteboard first): <https://wan-huiyan.github.io/wiggle-that-diagram/>
 
 ## How an expense claim gets checked (`expenses/`)
 
@@ -36,7 +36,7 @@ the live style. The same sources ship inside the skill as `examples/pizza/` and 
 Rebuild and check, from this folder (`S` is the skill's `scripts` folder):
 
 ```bash
-S=$(cd ../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts && pwd)   # absolute, so it still works after a cd
+S=$(cd ../skills/wiggle-that-diagram/scripts && pwd)   # absolute, so it still works after a cd
 python3 $S/common/pace_check.py beats.json
 ```
 
