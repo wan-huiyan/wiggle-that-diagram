@@ -30,7 +30,7 @@ js_syntax() { local name=$1; shift; local bad="" n=0 f
   done
   if [ -z "$bad" ]; then pass "$name ($n files)"; else fail "$name" "$bad"; fi; }
 
-WIG=skills/wiggle-that-diagram
+WIG=plugins/wiggle-that-diagram/skills/wiggle-that-diagram
 
 PYFILES=$(find $WIG/scripts -name '*.py'; echo $WIG/scripts/common/ffprobe-shim/ffprobe)
 js_syntax "node --check scripts + example JS (style C head/tail are fragments, left out)" \
@@ -53,8 +53,8 @@ style_c_rebuild
 versions() { "$PY" - <<'PY'
 import json, re, sys
 m = json.load(open('.claude-plugin/marketplace.json'))['plugins'][0]['version']
-p = json.load(open('.claude-plugin/plugin.json'))['version']
-s = re.search(r'^\s*version:\s*"?([^"\s]+)', open('skills/wiggle-that-diagram/SKILL.md').read(), re.M).group(1)
+p = json.load(open('plugins/wiggle-that-diagram/.claude-plugin/plugin.json'))['version']
+s = re.search(r'^\s*version:\s*"?([^"\s]+)', open('plugins/wiggle-that-diagram/skills/wiggle-that-diagram/SKILL.md').read(), re.M).group(1)
 sys.exit(0 if m == p == s else f'marketplace {m}, plugin.json {p}, SKILL.md {s}')
 PY
 }

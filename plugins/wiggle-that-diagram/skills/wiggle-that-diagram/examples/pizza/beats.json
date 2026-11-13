@@ -1,5 +1,5 @@
 {
- "_doc": "Caption script for the neutral wiggle-that-diagram demo: how a pizza order travels from the app to the kitchen to the door. Every name, number and address is made up. Format: skills/wiggle-that-diagram/scripts/common/beats.example.json.",
+ "_doc": "Caption script for the neutral wiggle-that-diagram demo: how a pizza order travels from the app to the kitchen to the door. Every name, number and address is made up. Format: plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts/common/beats.example.json.",
  "pizza": {
   "title": "How a pizza order travels",
   "alt": "Animation in five steps. Sam orders one margherita in a phone app. The order prints as a ticket in the kitchen and the pizza goes into the oven. When the timer ends, a driver collects the box. The app shows the driver on a map. The driver hands the box over at 12 Elm Street, 25 minutes after the order.",

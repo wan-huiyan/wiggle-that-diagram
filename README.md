@@ -81,7 +81,7 @@ bash scripts/check.sh
 Runs on every push and pull request (the **tests** badge above), 8 checks: every shipped script parses (JavaScript,
 Python, bash), the pacing checker passes on the example caption scripts, the live style rebuilds
 `demos/final/pizza.html` byte for byte, and the version agrees in all three places it is written. The browser
-contract tests (`scripts/style-*/test_contract.py`) need Chrome and are run by hand.
+contract tests (the skill's `scripts/style-*/test_contract.py`) need Chrome and are run by hand.
 
 ## 🙈 Limitations
 
@@ -99,7 +99,7 @@ contract tests (`scripts/style-*/test_contract.py`) need Chrome and are run by h
   method and the rendering engine under the two video styles.
 - The live style uses [GSAP](https://gsap.com) and the fonts [Outfit](https://fonts.google.com/specimen/Outfit) and
   [Kalam](https://fonts.google.com/specimen/Kalam) (OFL); see
-  [`THIRD_PARTY_NOTICES.md`](skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
+  [`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
 
 Made by Huiyan Wan with **Claude** (Anthropic) in Claude Code. Earlier history (1.0 to 1.3.0) happened in
 [cutify-this](https://github.com/wan-huiyan/cutify-this) and came along with the move.
