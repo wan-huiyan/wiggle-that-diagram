@@ -15,8 +15,9 @@ Every name and amount is invented.
 | Diagram clip (A) | `final/expenses-diagram.html` | 435 KB | `expenses/style-a/expenses.js`, `eras_expenses.js`, `meta.json` |
 | Live SVG (C) | `final/expenses.html` | 23 KB | `expenses/style-c/expenses.svg`, `expenses.js` (default theme) |
 
-`expenses.gif` (the whiteboard at 2× speed, made with ffmpeg from the B master video) is the README picture. Build
-it like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
+`expenses.gif` (the whiteboard at 2× speed, made with ffmpeg from the B master video) is the README hero, and
+`expenses-live.gif` is step 3 of the live style (`gif.py final/expenses.html --beat 3 --from 1.9 --to 8.1`; it stops
+before the taxi's arrow back to Ana starts, so the held last frame is clean). Build the films like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
 
 ## How a pizza order travels
 
