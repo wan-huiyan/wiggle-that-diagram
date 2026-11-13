@@ -29,8 +29,8 @@ One caption script feeds all three, so a switcher compares styles, not content.
 | **Live** | a polished product animation | inline SVG + GSAP with a virtual camera | [film](https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html) · 23 KB | [film](https://wan-huiyan.github.io/wiggle-that-diagram/pizza.html) · 21 KB |
 
 <p align="center">
-  <a href="https://wan-huiyan.github.io/wiggle-that-diagram/pizza.html"><img src="demos/pizza.gif" width="640" alt="A pizza order explained step by step: a phone with the pizza app, a kitchen with ticket #42 and an oven, a driver on a scooter heading to a house at 12 Elm St, with the caption The app follows the driver on a map and a five-step rail underneath"/></a>
-  <br/><sub>The live style: a pizza order from app to door, step 4 of 5 (made-up example).</sub>
+  <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html"><img src="demos/expenses-live.gif" width="640" alt="The live style, step 3 of 6: three receipt cards, Hotel $180, Dinner $95 and Taxi $40, get a coloured dot and a reason one after another: green Under the limit, amber Over the $60 meal limit, red No photo. The caption reads Each receipt gets a colour and a reason. Same receipt, same answer, above a six-step rail."/></a>
+  <br/><sub>The live style, step 3 of 6: each receipt gets a colour and a reason (made-up example). The whole six-step film is 23 KB.</sub>
 </p>
 
 ## ✨ What makes it different
