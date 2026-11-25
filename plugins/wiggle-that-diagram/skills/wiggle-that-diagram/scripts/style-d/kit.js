@@ -126,6 +126,12 @@ let OVER='',CAP='';
 function mini(stations,active,k=1){const cx=1790,cy=96,r=42,n=stations.length;let g=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${C.line}" stroke-width="8"/>`;
  stations.forEach(([num,name,col],i)=>{const [x,y]=stPos(cx,cy,r,i,n);g+=`<circle cx="${x}" cy="${y}" r="${i===active?12:7}" fill="${i===active?col:C.mut}" opacity="${i===active?1:.6}"/>`});
  const [num,name,col]=stations[active];g+=T(cx-r-26,cy+10,num+'  '+name,{size:28,wt:700,fill:col,a:'end'});OVER+=G(g,`translate(0 ${L(-30,0,k)})`,k);return ''}
+// a count drawn as the world's own objects, in exact proportion: n units in a grid, the first `lit` drawn lit.
+// glyph(i, lit) returns one unit's SVG at the origin (a book spine, a dock slot, a cup), so the chart belongs to the
+// film's world instead of being a generic waffle. o: {cols:10, dx:40, dy:40, k:1}; k (0..1) lights the units in turn,
+// so a count can climb, but the last frames of the shot must show k=1 (step 1b). Returns '' for n<=0.
+function units(n,lit,glyph,o={}){const cols=o.cols||10,dx=o.dx||40,dy=o.dy||40,k=o.k??1,on=Math.round(cl(k)*lit);let g='';
+ for(let i=0;i<n;i++)g+=G(glyph(i,i<on),`translate(${(i%cols)*dx} ${Math.floor(i/cols)*dy})`);return g}
 // the caption: arrives at shot time t0; one per shot. Default: wipes in left to right. setupFilm({capMode:'fade'}) fades it
 // in whole instead, so no frame (a still, a paused projector, a review frame) shows half a sentence.
 function cap(text,u,t0=0.4,size=50){CAP=text;

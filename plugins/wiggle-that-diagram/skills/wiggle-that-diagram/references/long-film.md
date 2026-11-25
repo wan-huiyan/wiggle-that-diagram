@@ -16,7 +16,11 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
 0. **Pick the world before building the film: three directions, the same two shots.** Skip this when the owner has
    already named the look. Otherwise write a short spec (the story and the hero, as in step 1), then build the same
    two shots (8–10 s each) in three worlds that differ in what the hero travels through and in look, not only in
-   colour (for a data film: streams into a reservoir; a whiteboard map; an auditor's desk with string). Each
+   colour, and that come from the subject's own nouns and from what its main idea does (step 2). The second build's
+   main idea was many sources flowing into one store, so its three were a reservoir, a whiteboard map and an
+   auditor's desk. A new film starts from its own subject's objects, never from a world named in this file. Vary the
+   palette between directions too, and make at least one of the three a light ground (paper, chalk, daylight) when
+   the subject allows it (`window.KIT_THEME`, step 4). Each
    direction gets a per-shot sheet (step 6), three stills per shot and a short MP4. The owner picks one in a single
    look, and the full film is built once.
    - Why: the owner of the second build asked for three styles before anything was built and chose in one reply;
@@ -27,16 +31,66 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    an order, a ticket). It appears in most shots and changes as the story goes: it slides in, gets stamped, gains its
    figures, rides the loop. The steps of the process are **places** in that world (stations on a track, a ground to
    dig in, a wall to pass through), never slides. Cut hard between shots; move the camera inside them.
+   In every shot it appears in, the hero **does** something (rides, is stamped, is carried, is counted); if it would
+   only sit beside a chart, leave it out of that shot. A parked hero is decoration.
    - Why: version 1 was built this way and the owner said it "tells the story more clearly". Version 2 kept the same
      content but used a fixed step rail along the bottom and one titled panel per step; the owner's verdict was that it
      "feels more like an animated slide deck". Version 3 went back to version 1's story with version 2's nicer shapes.
    - Orientation without a rail: a small map of the process in a corner (`mini()`), lit at the current station.
    → Check: say each shot as "the <hero> <verb>s <where>". If a shot is "a panel explaining step N", rewrite it.
 
+1b. **For a data story, find the point before the picture.** A data film fails when it shows everything that is
+   true; it works when every number on screen serves one sentence.
+   - Write the one sentence the viewer should leave with, and the one or two numbers that carry it. Every other
+     number earns its screen time by making that sentence land, or goes. (Second build: ten candidate details came out
+     of the client's own source material; two earned a place.)
+   - Say what each number counts ("40 sources checked", not "40"); counts of things you checked are safer on a public
+     screen than rates about people.
+   - Draw a number honestly: a level, length or area is in proportion to its value (measure it on a still); a
+     decorative mark that looks like data (flying slips, tick colours) is declared as decoration in the delivery
+     notes; the final value is on screen for at least 2 s before the cut, never only a value caught mid-climb.
+   - Use a metaphor for structure (where things flow, what splits, what replaced what) and a plain chart for
+     magnitude (which is bigger, how it changed), but **build the chart from the world's own countable objects**:
+     book spines lit on a shelf, dock slots left empty in a row, cups on a counter (`units()` in the kit draws n of
+     them with exactly `lit` lit). A big number beside a generic bar, ring or waffle on an empty stage is a slide by
+     step 1's check; allow at most one such shot per film. A metaphor that has to carry exact values turns into a
+     puzzle.
+   - Show once where the numbers come from (a source line on the end card or in a shot's tag), so a viewer can ask.
+   → Check: (a) the one sentence makes **one** claim; if it joins two findings with "and", "so" or a comma, pick one
+   and move the other to the notes. (b) Make a table: number | the exact words of the sentence it supports, quoted |
+   shot. A row whose quote is not part of the sentence is cut, however true. (c) At most three numbers carry the
+   sentence; any other number appears only as a label inside one of their shots. A brief's list of facts is a list
+   of candidates, not a shot list. (d) Look at every bar, fill and lit count against its value on a still, and use
+   the same count in every shot that shows it.
+   - Why: in a cold test, one builder handed eight example figures put all eight on screen, wrote a "one sentence"
+     that chained three findings, and in its check wrote topics ("weekends differ") instead of words from the
+     sentence; four of its twelve shots became stat panels outside its world, and a share drifted from 18% to 20%
+     between two shots of the same docks. The other builder lit exactly 44 of 100 book spines on a shelf, the
+     pattern above.
+
 2. **Give each idea one shape, and use the same shape every time the idea recurs.** List the 6–9 ideas the film
-   shows, then pick a shape per idea from the table below (or invent one with the same logic). Do not reuse one shape
+   shows, then pick each shape from **what the idea does**, in a world that fits your subject. Do not reuse one shape
    for different ideas, and do not invent a new metaphor per shot either: variety comes from ideas having different
    shapes, not from shots having different styles.
+   → Check (in addition to the contact sheet below): write the idea | shape table in a comment at the top of
+   `film.html`. Each shape appears in one row only, and each kind of quantity (a share, a duration, a count) has
+   one shape for the whole film.
+
+   | What the idea does | Shapes that do the same thing (pick one that belongs in your film's world) |
+   |---|---|
+   | many things flow into one place | streams into a pool, roads into a city, conveyor lines into a hopper, threads into a knot |
+   | something builds up | a container filling, a stack growing, a tape printing, a plant growing |
+   | things are split, sorted or judged | a sieve or net, a fork in a path, chutes off a sorting belt, bins |
+   | one thing is handed over to another | a relay baton, one stream joining another, a sign being swapped |
+   | two things are compared | a balance, two bars racing, two dials side by side |
+   | a value crosses a threshold | a needle past a pass mark, a lamp turning green, water over a line |
+   | a process repeats | a ring track with stations, a clock hand, a wheel |
+   | time depth, how far back | ground layers, tree rings, water depth, a ruler laid under the scene |
+   | something is thin or patchy | a sparse field of dots, a half-filled grid (never a crack or a gap that blames someone) |
+
+   The two tables that follow are the choices two films made, kept for the reasoning in their last column. They are
+   examples, not a menu: a new film that reuses their world (a loop of stations, a reservoir, a paper boat) has to
+   earn it from its own subject.
    - Why: the first version 3 build drew calls, the checklist, people, results, the re-scorer and the stop rule as
      rounded rectangles with text. The owner asked for it to be "less card based" with "more variety in elements".
      Re-drawing each idea as its own object (below) fixed it without changing a word or a timing.
@@ -69,7 +123,8 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    | a repeating process | ring track with stations, the hero riding laps (`track`, `onTrack`) | one lap = one round, without saying it |
    | an automated worker | small robot that takes notes in and prints a list out (`robot`) | |
 
-   The six rows below have no kit function: draw them in the film, as the second build did.
+   The six rows below are the second build's choices for a film about many data sources; none has a kit function,
+   so the film drew them itself.
 
    | Idea | Shape (drawn in the film) | Why it works |
    |---|---|---|
@@ -87,9 +142,15 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    would change (a quote, a name, a figure, a date) goes in `STR`.
    → Check: switch `?v=` and look at two stills of the same shot: every line that should differ does.
 
-4. **Build each shot from the kit, with the camera inside the shot.** What the viewer sees at camera scale 1 is
+4. **Build each shot from the kit, with the camera inside the shot.** The kit's colours are one house look (navy,
+   cream, gold); set `window.KIT_THEME = {bg:…, ink:…, gold:…, …}` before `kit.js` loads, and the page's body
+   the skeleton sets the page background from it, to use the owner's palette. On a light ground also set `cap`
+   (the caption colour; the default is a light grey that vanishes on paper), `ink`, `mut`, `panel`, `card` and
+   `line`, and give secondary text a dark grey, never a mid grey. The font is fixed: `render.py` checks for Outfit. What the viewer sees at camera scale 1 is
    about x 87–1833 and y 97–825 in the film's own coordinates (the stage band 130–930 on screen, scaled 1.1 around
-   (960, 470)); a push to scale s shrinks that window around the focus point. A ring track of radius 300 at the
+   (960, 470)); a push to scale s shrinks that window around the focus point: each edge e becomes f + (e − f)/s, with
+   f the focus coordinate (at s = 1.05 about the centre: x ≈ 129–1791, y ≈ 114–808). Keep labels another 40 px
+   inside that. A ring track of radius 300 at the
    centre already puts its top station's label outside it. `cam(scale, focusX, focusY)` around the whole
    picture; a slow push (1.00 → 1.05) or glide while words are read, a pull back before the cut. The picture is
    clipped to the stage band, so a push never covers the header or the caption. `cap()` and `mini()` draw on the
@@ -119,8 +180,9 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    every picture label the stage edge cuts. The cut with the real (longer) strings is the one that overflows.
    - Why the list: a label cut by the frame is easy to miss on a sheet. The worked example's own loop shot hid the
      name of its first station for two versions; the first run of this check also found three more.
-   → Check: the cut-label list is empty (a decorative piece drifting off screen is fine; a label is not), and on the
-   sheet: no text over text; no text on the paper tape in a colour that vanishes on it; nothing
+   → Check: the cut-label list is empty (a decorative piece drifting off screen is fine; a label is not). A shot
+   whose point is the motion (a stream draining, bikes leaving) looks empty on an end still: judge it on a middle
+   still (`--stills <t>`) instead. And on the sheet: no text over text; no text on the paper tape in a colour that vanishes on it; nothing
    cropped by the camera at the end of a shot (a pan that frames the right side cuts the left labels); the caption
    is fully on screen.
 
@@ -129,7 +191,10 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    `fit_durs.py beats.<cut>.json` prints the `DURS` array that passes the reading rule, and `pace_check.py` confirms.
    It also prints two advisories per shot: a caption over ~58 characters (it runs off the frame; captions do not
    wrap), and new words arriving less than 2.5 s apart (fine for the rows of one list landing together, not for
-   three separate things that each need a read). `fit_durs.py` only lengthens: if the total is far from what was
+   three separate things that each need a read). It counts a number that animates once, and every distinct number
+   left on screen at the end of a shot as its own word. `fit_durs.py` only lengthens, and prints the total against
+   the reading floor: aim for the floor plus 1–2 s per shot, and if the total is more than 1.4× the floor, trim the
+   holds. If the total is far from what was
    asked, cut words or shots, and agree the length with the person before rendering. Never keep a hand list of on-screen words: it drifted four times in the worked example and
    each drift was a pacing failure found late. Expect the real cut to run longer (worked example: 121 s public,
    146 s internal) because real quotes are longer.
@@ -265,6 +330,17 @@ stand-in, the client's stand-ins; step 9), then two details from the source mate
 pass over the source material proposed ten details and kept two: the rest were wrong, showed one of our own working
 tables as if it were the client's, or put an unresolved question on screen. The calm cut went red on the film gate's
 fast-motion measure only (0.001; see step 8) and was delivered by hand with the red in the notes.
+
+## Tested cold on data stories (Nov 2026)
+
+Two fresh agents, each given only this skill and a new subject with example figures (a city bike-share scheme; a
+county library service), built films to the contact sheet. Neither copied the earlier films' worlds: one drew a city
+from above with dock slots that carried the numbers, the other shelves, branches and an archive with book spines
+that carried them, each in its own palette. What they did copy was the kit's default role of a dark stage with one
+warm accent, and the pull towards stat panels; both are now addressed above (step 0 light ground, step 1b's check
+and `units()`). One caveat about the test itself: the bike-share subject had been named as an example in step 0,
+so only the library film tested world-finding cleanly. **A cold-test subject must not appear anywhere in this
+skill or its examples; grep the skill folder for the subject's nouns before running one.**
 
 ## Tested cold
 

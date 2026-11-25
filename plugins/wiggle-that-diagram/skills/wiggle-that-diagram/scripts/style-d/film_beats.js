@@ -37,6 +37,9 @@ function run(v) {
     for (let u = 0; u < d - 0.02; u += 0.25) {   // finer pass, only for arrival times
       const r = renderFrame(s.a + u); texts(r.pic).forEach(t => { const k = shape(t); if (t !== r.cap && first.get(k) > u) first.set(k, u); });
     }
+    // every distinct number still on screen at the end of the shot is its own read ('385,000' beside '410,000' is two);
+    // the shape key above only collapses the in-between values of a number that animates
+    texts(renderFrame(s.a + d - 0.02).pic).forEach(t => { if (/\d/.test(t) && t !== caption) words.add(t); });
     if (caption.length > 58) warn.push(`shot ${i + 1}: caption is ${caption.length} characters; over ~58 it runs off a 1920 frame at the default size`);
     const groups = [...new Set([...first.entries()].filter(([t]) => t.split(' ').length >= 2 || t.length > 6).map(([, u]) => +u.toFixed(2)))].sort((a, b) => a - b);
     const close = groups.filter((u, j) => j && u - groups[j - 1] < 2.5 && u > 0.5);

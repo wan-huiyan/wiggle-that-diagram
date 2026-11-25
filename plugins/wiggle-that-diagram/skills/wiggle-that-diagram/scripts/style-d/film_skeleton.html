@@ -7,7 +7,9 @@ html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0f1420
 svg text{font-family:Outfit,sans-serif}
 </style></head><body>
 <svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<!-- your palette: <script>window.KIT_THEME={bg:"#...",ink:"#...",gold:"#..."}</script> goes here, before kit.js -->
 <script src="kit.js"></script>
+<script>if(document.body)document.body.style.background=C.bg</script>
 <script>
 // Plumbing only. Replace the two placeholder shots with your own; keep the structure:
 // 1. every on-screen word lives in STR (one object per cut: ?v=public, ?v=internal, ...);

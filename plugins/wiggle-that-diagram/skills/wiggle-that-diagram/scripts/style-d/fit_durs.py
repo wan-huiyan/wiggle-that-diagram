@@ -22,12 +22,15 @@ data = json.loads(Path(args[0]).read_text())
 for film, spec in data.items():
     if film.startswith("_"):
         continue
-    seen, out = set(), []
+    seen, out, floors = set(), [], []
     for b in spec["beats"]:
         cw = toks(b["caption"])
         pw = toks(b.get("picture", ""))
         new = list(dict.fromkeys(t for t in pw if t not in set(cw) and t not in seen))
         seen |= set(pw)
         floor = max(4.5, (len(cw) + len(new)) / 3 + 1.5) + pad
-        out.append(max(float(b["dur"]), math.ceil(floor / step - 1e-9) * step))
-    print(f"{film}: [{', '.join(f'{d:.1f}' for d in out)}]  total {sum(out):.1f} s")
+        floors.append(math.ceil(floor / step - 1e-9) * step)
+        out.append(max(float(b["dur"]), floors[-1]))
+    ratio = sum(out) / sum(floors)
+    note = "  -> over 1.4x the floor: trim the holds, or agree the length" if ratio > 1.4 else ""
+    print(f"{film}: [{', '.join(f'{d:.1f}' for d in out)}]  total {sum(out):.1f} s, reading floor {sum(floors):.1f} s ({ratio:.2f}x){note}")
