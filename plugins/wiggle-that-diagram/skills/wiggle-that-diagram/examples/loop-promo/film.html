@@ -45,7 +45,7 @@ const STR={
    brain:'Brainstorm: what would close each open ask?', dig:'Dig: run it, rebuild, trace every figure.',
    vlist:'Verify: the builder never marks its own work.', vint:'Verify: each AI client scores, asks and gives feedback.', vfix:'Feedback becomes our robot\'s fix list. Then they re-read.',
    wrong:'Checks passed. The picture was wrong.', back:'Back to brainstorm: their questions become rows.',
-   rounds:'Round after round, until it stops.', stop:'Stop: nothing left to close, every slide 4+.',
+   rounds:'Round after round, until it stops.', stop:'It stops when: nothing left to close, every slide 4+.',
    end:'Two skills, one loop. Start at either.'},
   link:'github.com/wan-huiyan/no-ask-left-behind'
  }
@@ -57,7 +57,7 @@ const qcard=quote, SIL=FIGURE_DOTS, STICKY=C.sticky;
 const tapeK=tape;   // the film's own defaults for its checklist tape:
 function tapeList(x,y,rows,o={}){const more=o.more===true?'… 80 more, each with its quote':o.more;return tapeK(x,y,rows,Object.assign({title:'Checklist',count:'84 asks',idCol:id=>id[0]==='S'?C.pteal:C.pgold,statusWords:o.plain?null:{met:'met',notMet:'not met'}},o,{more}))}
 const dial=(x,y,v,lab,col,o={})=>gauge(x,y,v,lab,col,Object.assign({mark:4},o));
-const DURS={public:[6.5, 7.0, 6.0, 11.5, 9.5, 6.5, 7.5, 6.5, 10.5, 11.5, 9.0, 7.5, 6.5, 6.5, 6.0, 8.0]};
+const DURS={public:[6.5, 7.0, 6.0, 11.5, 9.5, 6.5, 7.5, 6.5, 10.5, 11.5, 9.0, 7.5, 6.5, 6.5, 6.5, 8.0]};
 setupFilm({durs:DURS[V]||DURS.public, header:'/no-ask-left-behind + /imposter-client'});
 
 // the loop track: five stations
