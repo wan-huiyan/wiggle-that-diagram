@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.4.0"
+  version: "1.5.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -149,7 +149,15 @@ the reason behind every rule, is `references/long-film.md`; the positive example
 4. **Fact-check every real line, and whether each shot shows something that happened, BEFORE the first full render.**
    True quotes did not make a true picture: 118 of 118 quotes were real and six shots still overclaimed.
 5. **Contact sheet of every shot in every cut**, then **durations from the words actually drawn**
-   (`film_beats.js` → `fit_durs.py` → `pace_check.py`), then render, gate, deliver, one cold reviewer.
+   (`film_beats.js` → `fit_durs.py` → `pace_check.py`), then render, gate, deliver.
+6. **Before building, three directions on the same two shots** (step 0 of `references/long-film.md`; skip it when the
+   look is already chosen); **after rendering and before delivering, reviewers chosen by who appears in the film**
+   (step 9): a cold viewer and a fact checker always, plus a stand-in for any colleague whose work is
+   shown and for any client who is named, all from one review pack (every on-screen string as built, the sources,
+   frames pulled from the final MP4). On a data film the cold viewer and fact checker found nothing that had to
+   change, and the two stand-ins found five things. A film about someone's data shown in public has its own rules
+   (no actor in a challenge, copies "on purpose", no open question on screen, the client's hope in the client's own
+   words, names only by the owner's choice): see `references/long-film.md`.
 
 ```sh
 python3 <skill>/scripts/style-d/new_film.py my-film            # kit.js, fonts/, a plumbing-only film.html
@@ -245,7 +253,9 @@ conflict all agents raise (here: loop length).
   elements before GSAP animates them.
 - Style D: a fact-check that arrives after rendering throws the render away (twice in the worked example); a font
   that is not bundled renders silently in a fallback (`render.py` now stops instead); a camera pan at the end of a
-  shot crops the labels on the far side, so check the END still of every shot.
+  shot crops the labels on the far side, so check the END still of every shot. A wiped-in caption shows half a
+  sentence on any still (`setupFilm({capMode:'fade'})`); a count-up caught mid-shot reads as the result (hold the
+  final counts ≥ 2 s); picture text under 26 px was called too small for a room.
 
 ## Scripts
 
@@ -311,6 +321,13 @@ example").
 
 ## Changelog
 
+- **1.5.0** (2026-11-25): lessons from a second style D build, a short film about a client's data for an internal
+  audience. `long-film.md` gains step 0 (three directions on the same two shots), reviewers chosen by who appears in
+  the film (step 9, with a frame-pull script), a section on showing someone's data in public, six data-story shapes
+  to draw (no new kit functions), a 26 px floor for stage labels and five traps. The film skeleton now starts with
+  `capMode:'fade'`. `kit.js`: `setupFilm({capMode:'fade'})` fades captions in whole. `render.py` asks for both Outfit
+  weights before its font check, so a film whose first frame has no text no longer fails it (a missing font file
+  still stops the run with the same message).
 - **1.4.0** (2026-11-25): style D, a 1–3 minute silent film rendered to MP4 from one SVG page. Adds the shape kit
   (`kit.js`: tape, dial, sticky note, waveform, dot figure, bulb, lens, balance, lamp, ring track, robot, the hero
   card), the renderer that stops on a missing font, a word count from the drawn SVG (`film_beats.js`) and

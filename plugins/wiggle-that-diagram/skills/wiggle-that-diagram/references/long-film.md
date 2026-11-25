@@ -4,11 +4,24 @@ Use style D when the ask is a **film**, not a slide loop: a promo or explainer o
 delivered as an MP4 (for a team channel, a README, a talk). Styles A–C make short looping clips that live inside a deck;
 style D makes one continuous story of 10–20 shots.
 
-Everything here comes from one build: a promo for two Claude skills that work as one loop, made in three versions over
+Most of this comes from one build: a promo for two Claude skills that work as one loop, made in three versions over
 two days, plus an internal cut using a real client project's lines. The public cut ships as `examples/loop-promo/`.
-Read that film's source before writing your own: it is the positive example for every rule below.
+Read that film's source before writing your own: it is the positive example for every rule below. A second build, a
+film of about a minute and a half about a client's data for an internal audience, added step 0, the review lenses in
+step 9 and the section "A film about someone's data, shown in public"; it is summarised at the end. Throughout,
+**the owner** is the person the film is made for, who approves it.
 
 ## The method, step by step (each step ends with the check that proves it)
+
+0. **Pick the world before building the film: three directions, the same two shots.** Skip this when the owner has
+   already named the look. Otherwise write a short spec (the story and the hero, as in step 1), then build the same
+   two shots (8–10 s each) in three worlds that differ in what the hero travels through and in look, not only in
+   colour (for a data film: streams into a reservoir; a whiteboard map; an auditor's desk with string). Each
+   direction gets a per-shot sheet (step 6), three stills per shot and a short MP4. The owner picks one in a single
+   look, and the full film is built once.
+   - Why: the owner of the second build asked for three styles before anything was built and chose in one reply;
+     nothing built for the chosen world was thrown away later, because only two shots existed when the choice was made.
+   → Check: three folders, each with a sheet and an MP4 of the same two shots, and the person's choice in writing.
 
 1. **Write the story as one hero object travelling through one world.** Pick the object the viewer follows (a draft,
    an order, a ticket). It appears in most shots and changes as the story goes: it slides in, gets stamped, gains its
@@ -29,7 +42,12 @@ Read that film's source before writing your own: it is the positive example for 
      Re-drawing each idea as its own object (below) fixed it without changing a word or a timing.
    - **Draw the objects big.** A cold test on a new topic got the shapes right and still looked thin: three small
      people and three tiny plates on a wide dark stage. The main object of a shot should span at least a third of the
-     stage width, and picture text should be 20 px or more in the 1920-wide frame (the caption is 50).
+     stage width, and every label inside the stage should be **26 px or more as rendered**: its font size × the stage
+     scale (1.1) × the smallest camera scale the shot reaches, in the 1920-wide frame (the caption is 50; the header,
+     the kit's per-shot tag line and the corner map are outside the stage and keep their own sizes). The second build
+     started at 20 px and its cold reviewer called the text too small for a room; the smallest, dimmest lines (grey
+     "e.g." examples under a label) were the hardest, so give secondary text a light grey, never a mid grey, on a dark
+     stage.
    → Check: a contact sheet of one still per shot. If most frames are boxes with text in them, redo step 2; if most
    frames are mostly empty, scale the objects up.
 
@@ -50,6 +68,17 @@ Read that film's source before writing your own: it is the positive example for 
    | a condition that must hold | signal lamp, red until it turns green (`lamp`) | two lamps = two conditions; a gate opens when both are green |
    | a repeating process | ring track with stations, the hero riding laps (`track`, `onTrack`) | one lap = one round, without saying it |
    | an automated worker | small robot that takes notes in and prints a list out (`robot`) | |
+
+   The six rows below have no kit function: draw them in the film, as the second build did.
+
+   | Idea | Shape (drawn in the film) | Why it works |
+   |---|---|---|
+   | many systems feeding one store | hills with a stream each, running into one lake; arrows on the stream show the direction, a small sign on a stream credits who moves it | "wide" without a list of names; two-way arrows show a sync, not a one-way dump |
+   | how far back each source goes | the lake cut open: deeper = older, one bar per source from its start date, a shaded band for the period being asked about | bars that stop short of the band show at a glance which sources cannot answer for that period; no chart axis to read |
+   | rules for duplicate records | one sorting net per rule: two droplets in; merged, both passed, or stacked into one out | each rule becomes a visible verb, and the three can sit side by side |
+   | a tool replaced by another | one stream narrowing into the other's bend, a stitched seam and a date post at the handover | reads as a handover, not a break; never draw a gap or a dry bed |
+   | verdicts on a list | a printed list feeding three buckets that fill to the real counts | counts become levels; the flying slips are decoration, so say so in the notes |
+   | the question the film is about | a paper boat with the question as its label, in every shot | the hero for a data film; the label can fade when the answer arrives |
 
 3. **Write every on-screen word in one place, per cut.** All strings live in `STR.<cut>` (one file, several cuts,
    chosen with `?v=`); captions are 3–8 words, picture labels 1–6. When the film needs a real cut and a public cut,
@@ -77,6 +106,12 @@ Read that film's source before writing your own: it is the positive example for 
      ourselves, a slide title that was on no slide, a step that one run never had. True quotes do not make a true
      picture. The check arrived after rendering had started, and two full renders were thrown away.
    → Check: the agent's list is empty, or every item is fixed or recorded as a deliberate choice.
+   - A film with no quotes still makes a claim in every label and every number. In the second build a subtitle
+     "things we could measure about a customer" sat over a list where about a quarter of the rows were not about
+     customers at all ("things we could track" replaced it), and the example under a "use one copy" rule was a case
+     where the audit used parts of both.
+     Give the checker every on-screen string, the source files, and the rule that decorative pieces (flying slips,
+     tick colours) are declared as such.
 
 6. **Look at every shot of every cut before rendering.**
    `render.py film.html --per-shot --variant <cut> --out sheet-<cut>` empties the folder (old stills from an earlier
@@ -114,9 +149,35 @@ Read that film's source before writing your own: it is the positive example for 
      So: render a short side-by-side of calm and accented, let the person choose, and if calm, deliver with the red
      written into the notes (`deliver.py` refuses red, so copy the film yourself).
 
-9. **One cold reviewer.** A cheap agent that sees only frames sampled every ~3 s, no source, no brief. Fix what it
-   misreads; record what you leave and why.
-   → Check: a review file exists, with fixed and not-fixed lists.
+9. **Reviewers, chosen by who appears in the film**, after the MP4 is rendered and before it goes to anyone (between
+   render and deliver in step 8). Always a cold viewer: a cheap agent that sees only frames, no source, no brief, and
+   reads at about 3 words a second. Add a fact checker with the source files (step 5). When the film shows a
+   colleague's work, add a stand-in for that colleague, reading only for whether their work is blamed, misdescribed
+   or uncredited. When it names a client, add stand-ins for the client's people, reading for blame, mockery and
+   misattribution. A **stand-in** is an agent given a person's own words (their messages, call notes, emails) and
+   told to read the film as that person would; if you have a skill that builds them, use it. Run the lenses in
+   parallel and give each the same **review pack**, one file holding: every on-screen string **as built** (ask the
+   building agent for the list; never use your plan), the source files, and frames pulled from the final MP4,
+   because the stills folder can predate the last render. Frames at 0.6 s into each shot, its middle and 0.3 s
+   before its end, from the cut's `DURS`:
+   ```sh
+   python3 - <<'EOF'
+   import subprocess; d=[9.5,12.5,17,8]   # paste the cut's DURS
+   s=0
+   for i,x in enumerate(d,1):
+       for tag,t in (("a",s+0.6),("b",s+x/2),("c",s+x-0.3)):   # -> s01a.png, s01b.png, s01c.png, ...
+           subprocess.run(["ffmpeg","-loglevel","error","-y","-ss",f"{t:.2f}","-i","film.mp4","-frames:v","1",
+                           "-vf","scale=1600:-1",f"s{i:02d}{tag}.png"],check=True)
+       s+=x
+   EOF
+   ```
+   - Why: in the second build the cold viewer and the fact checker found no must-fix; the two stand-ins found five.
+     A note filed under "the client's questions" was a question the client never asked (it set the client up as
+     naive); the example on a duplicate rule used a source with an unresolved issue; a bucket called "Not usable"
+     read as "N of the client's sources are broken" when most were only off-topic for the question; a caption made
+     the client the actor of a "challenge"; and the ending could be read as a verdict on the client rather than on
+     the data. The owner accepted four and kept the ending: a stand-in's verdict is advice, the owner rules.
+   → Check: a review file exists per lens, with fixed and not-fixed lists, and every not-fixed item has a reason.
 
 ## Real lines: a cut with a real client's words, and a public cut
 
@@ -135,11 +196,44 @@ Read that film's source before writing your own: it is the positive example for 
 - Never put a person's profile on screen (how they read, what they distrust, how to win them): only what they asked,
   said or scored. The internal cut never goes in a repo, especially one that is mirrored to the client.
 
+## A film about someone's data, shown in public
+
+A film that shows a client's data, and the colleagues who move it, to a company audience (and possibly the client)
+has rules a promo does not. All of them came from the second build's reviews.
+
+- **A challenge has no actor.** "Changing: <a channel> moved to a new tool", never "<client> moved <a channel>…". A limit
+  sits on the source's history, mess sits on systems recording things differently, and nothing reads as the
+  pipelines being broken, leaky or late: no drips, cracks, gaps, red crosses or "lost".
+- **Copies that exist by design say so** ("the same record, copied on purpose → use one"). Without it, a copy reads as
+  someone's mistake.
+- **Name a verdict by what it means for the question**, not as a quality grade: "Not for this question N", not
+  "Not usable N".
+- **No open question on screen, not even as an example.** If a source has an unresolved issue, pick another example or
+  a generic one ("records one system copies so it can act on them").
+- **Put the client's hope in the client's own words.** The hope is what the client wants the data to show; in the
+  second build it was the hero's label and a caption. "One lever", our own word, confused the owner; searching the
+  call transcripts found a short phrase the client had used themselves, which became the label and one of the notes
+  in the opening shot. Offer the owner 3–4 wordings with their character counts (captions ≤ 58, step 7), and say
+  which one is the client's.
+- **A question shown as the client's must be one they asked.** The opening shot showed the client's questions as
+  notes under a small heading; one was our paraphrase of a question they never asked. Prefer their words, and mark
+  any paraphrase as yours in the delivery notes.
+- **Names on screen only when the owner chooses them.** Then send each named person the cut before it plays, and ask
+  whether they would rather not be named. Keep a thank-you in one voice: "…and my Claude, who helped us understand"
+  mixes two; "…who helped me understand" or "our Claude … us" does not.
+- **Credit the people who move the data** on the end card and on the streams they run, and keep the thank-you away
+  from any word about data quality ("messy", "limited"), where it reads as sarcasm.
+
 ## Mechanics and traps
 
 | Trap | What happens | Fix |
 |---|---|---|
-| Font not bundled | the film renders in a fallback font with no error | `new_film.py` copies `fonts/`; `render.py` exits if Outfit did not load |
+| Font not bundled | the film renders in a fallback font with no error | `new_film.py` copies `fonts/`; `render.py` exits if Outfit did not load (it asks for both weights first, so a film whose first frame has no text no longer fails the check) |
+| Caption wipes in | a still, a review frame or a paused screen shows half a sentence | `setupFilm({capMode:'fade'})` fades each caption in whole |
+| A morph's in-between state | a blank sheet between "notes" and "boat" reads as a glitch on a still | keep any featureless in-between under 0.5 s |
+| A count-up mid-shot | a reviewer reads the counts on a frame caught mid-climb as the result (they did not even add up to the list's total) | hold the final counts at least 2 s before the cut; say in the notes that the climb is animation |
+| The hero's label changes | a longer label overflows the hull in some shots only | make the shape grow to fit its label, and re-check the end still of every shot after any label change |
+| The gate counts cuts that are not there | a calm 7-shot film read as 11 hard cuts | note the true count in the delivery notes; it does not change the verdict |
 | Overlay drawn inside the camera | caption and map zoom and drift with the picture | draw them with `cap()` / `mini()`, which write to the overlay, never into the shot's returned SVG |
 | Zoom covers header or caption | a camera push draws over them | the kit clips the picture to the stage band (`setupFilm({stage})`) |
 | SVG ids repeat | two `tape()` calls fight over one clipPath | the kit numbers clip ids and resets them every frame; do the same for your own `clipPath`s |
@@ -160,6 +254,17 @@ Read that film's source before writing your own: it is the positive example for 
 - 16 shots, 126 s (public) and 148 s (internal), 1920×1080, 30 fps, x264 CRF 16.
 - Full render with 6 parallel pages: roughly 8–10 minutes per cut. A still: about a second each after page load.
 - The film page is ~30 KB of hand-written SVG and JS; the kit is ~15 KB.
+
+## Second build: a data film for an internal audience
+
+7 shots and an end card, about 85 s, one cut (public), calm. The hero was a paper boat carrying the client's question;
+the world a reservoir (systems as hills with streams, the data store as a lake, history as depth). Built in five
+rounds by one building agent resumed each time: directions (step 0), the full film, a first review (text size, a
+stray mark, gaps that read as lost data), the review in four lenses (cold viewer, fact checker, a colleague's
+stand-in, the client's stand-ins; step 9), then two details from the source material and the end card. A two-agent
+pass over the source material proposed ten details and kept two: the rest were wrong, showed one of our own working
+tables as if it were the client's, or put an unresolved question on screen. The calm cut went red on the film gate's
+fast-motion measure only (0.001; see step 8) and was delivered by hand with the red in the notes.
 
 ## Tested cold
 

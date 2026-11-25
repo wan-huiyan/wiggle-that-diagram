@@ -22,6 +22,9 @@ async def open_page(browser, url):
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     await page.goto(url)
+    # A face is only fetched once something uses it, so a film whose first frame has no text yet would fail the
+    # check below. Ask for both weights explicitly before checking.
+    await page.evaluate("Promise.all([document.fonts.load('700 30px Outfit'), document.fonts.load('400 30px Outfit')]).catch(() => null)")  # a missing file is reported by the check below
     await page.evaluate("document.fonts.ready")
     if errors:
         sys.exit("page error: " + errors[0])
