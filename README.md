@@ -37,7 +37,7 @@ One caption script feeds all three, so a switcher compares styles, not content.
 
 When a loop is not enough, **style D** makes a 1 to 3 minute silent film: one story told in 10 to 20 shots, drawn
 as a single SVG page and rendered to an MP4 (1920×1080, 30 fps). The 2-minute film at the top of
-[dig-till-done](https://github.com/wan-huiyan/dig-till-done#readme) was made this way, and its source ships as the
+[no-ask-left-behind](https://github.com/wan-huiyan/no-ask-left-behind#readme) was made this way, and its source ships as the
 worked example in `examples/loop-promo/`.
 
 - **A small drawing kit** (`kit.js`): a camera, captions, people, speech, and one shape per meaning (a tape for a

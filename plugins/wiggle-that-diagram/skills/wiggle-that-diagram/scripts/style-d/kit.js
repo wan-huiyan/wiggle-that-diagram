@@ -32,7 +32,7 @@ function avatar(x,y,col,s=1){return G(`<circle r="40" fill="${C.panel}" stroke="
 // a speech bubble that pops in as k goes 0 -> 1; o.tail 'up' | 'right' | default down-left; o.who: small grey attribution under it
 function bubble(x,y,s,k,o={}){if(k<=0)return '';const size=o.size||28,w=o.w||(tw(s,size)*1.05+56),h=size+32,col=o.col||C.teal,tx=o.tx||0;
  const tail=o.tail==='up'?`<path d="M${tx-14} ${-h/2+2} l14 -26 l14 26z" fill="${C.panel}" stroke="${col}" stroke-width="2.5"/>`:o.tail==='right'?`<path d="M${w/2-2} ${-8} l26 10 l-26 12z" fill="${C.panel}" stroke="${col}" stroke-width="2.5"/>`:`<path d="M${tx-16} ${h/2-2} l-8 26 l30 -26z" fill="${C.panel}" stroke="${col}" stroke-width="2.5"/>`;
- return G(tail+R(-w/2,-h/2,w,h,{r:h/2,fill:C.panel,stroke:col,sw:2.5})+T(0,size*0.36,s,{size,wt:700,a:'middle'})+(o.who?T(0,h/2+30,o.who,{size:20,a:'middle',fill:C.mut,wt:700}):''),`translate(${x} ${y}) scale(${bk(cl(k))})`,cl(k*2))}
+ return G(tail+R(-w/2,-h/2,w,h,{r:h/2,fill:C.panel,stroke:col,sw:2.5})+T(0,size*0.36,s,{size,wt:700,a:'middle'})+(o.who?T(0,h/2+(o.tail?30:52),o.who,{size:20,a:'middle',fill:C.mut,wt:700}):''),`translate(${x} ${y}) scale(${bk(cl(k))})`,cl(k*2))}
 // one remark in someone's words, as a quote pill; without text it is a blank pill (for a crowd of them)
 function quote(x,y,rot,s=1,o={}){const col=o.col||C.gold,w=o.text?Math.max(240,tw(o.text,26)*1.05+80):220;
  const g=R(-w/2,-30,w,60,{r:30,fill:C.panel,stroke:col,sw:2.5})+T(-w/2+18,14,'“',{size:44,wt:700,fill:col})+(o.text?T(-w/2+50,9,o.text,{size:26,wt:700}):R(-w/2+52,-5,w-90,10,{r:5,fill:C.mut}));
