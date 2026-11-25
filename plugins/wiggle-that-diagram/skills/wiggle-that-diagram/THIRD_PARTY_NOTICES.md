@@ -31,4 +31,10 @@ SOFTWARE.
 ## Runtime dependencies (loaded, not bundled)
 
 - GSAP 3.12.5 from cdnjs (style C), https://gsap.com — GreenSock standard license.
-- Outfit and Kalam fonts from Google Fonts — SIL Open Font License 1.1.
+- Outfit and Kalam fonts from Google Fonts (styles A–C) — SIL Open Font License 1.1.
+
+## Bundled
+
+- Outfit (Regular, Bold) in `scripts/style-d/fonts/`, for style D. Copyright 2021 The Outfit Project Authors
+  (https://github.com/Outfitio/Outfit-Fonts), SIL Open Font License 1.1; the full licence is
+  `scripts/style-d/fonts/Outfit-OFL.txt`.

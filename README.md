@@ -33,6 +33,23 @@ One caption script feeds all three, so a switcher compares styles, not content.
   <br/><sub>The live style, step 3 of 6: each receipt gets a colour and a reason (made-up example). The whole six-step film is 23 KB.</sub>
 </p>
 
+## 🎬 New in 1.4.0: a long film
+
+When a loop is not enough, **style D** makes a 1 to 3 minute silent film: one story told in 10 to 20 shots, drawn
+as a single SVG page and rendered to an MP4 (1920×1080, 30 fps). The 2-minute film at the top of
+[no-ask-left-behind](https://github.com/wan-huiyan/no-ask-left-behind#readme) was made this way, and its source ships as the
+worked example in `examples/loop-promo/`.
+
+- **A small drawing kit** (`kit.js`): a camera, captions, people, speech, and one shape per meaning (a tape for a
+  list, a dial for a score, a balance for a check, a lamp for pass or fail), so frames are pictures, not slides.
+- **Pacing from what is actually drawn:** `film_beats.js` counts the words on screen in every shot, `fit_durs.py`
+  prints shot lengths that pass the reading rule.
+- **Checks before the long render:** `render.py --per-shot` makes a contact sheet of every shot and lists any label
+  the frame edge cuts.
+
+Start with `python3 scripts/style-d/new_film.py <folder>`; the method is in
+[`references/long-film.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/references/long-film.md).
+
 ## ✨ What makes it different
 
 Most explainer animations are too fast to read: the picture moves on while you are still on the caption.
@@ -78,15 +95,18 @@ The demo sources and the exact rebuild commands are in [`demos/`](demos/README.m
 bash scripts/check.sh
 ```
 
-Runs on every push and pull request (the **tests** badge above), 9 checks: every shipped script parses (JavaScript,
+Runs on every push and pull request (the **tests** badge above), 10 checks: every shipped script parses (JavaScript,
 Python, bash), the pacing checker passes on the example caption scripts, the live style rebuilds
-`demos/final/pizza.html` and `demos/final/expenses.html` byte for byte, and the version agrees in all three places it is written. The browser
+`demos/final/pizza.html` and `demos/final/expenses.html` byte for byte, the long-film example passes the pacing
+check on the words it actually draws, and the version agrees in all three places it is written. The browser
 contract tests (the skill's `scripts/style-*/test_contract.py`) need Chrome and are run by hand.
 
 ## 🙈 Limitations
 
 - **The video styles need tools:** `uv`, Google Chrome, ffmpeg and a copy of the
   [huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) skill. The live style needs only Python.
+  The long film (style D) needs node, `uv` (Playwright) and ffmpeg, plus huashu-art-motion for the
+  film gate at delivery.
 - **Video styles are heavy.** The six example films run 423 to 818 KB each in the video styles, against 21 to 24 KB
   for the live style (budget: 900 KB and 40 KB).
 - **"Readable" is measured, "clear" is not.** The pacing gate proves each step is on screen long enough; whether the
@@ -97,7 +117,7 @@ contract tests (the skill's `scripts/style-*/test_contract.py`) need Chrome and 
 
 - **[huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion)** by 花叔 (alchaincyf, MIT): the direction
   method and the rendering engine under the two video styles.
-- The live style uses [GSAP](https://gsap.com) and the fonts [Outfit](https://fonts.google.com/specimen/Outfit) and
+- The long film bundles the Outfit font (OFL). The live style uses [GSAP](https://gsap.com) and the fonts [Outfit](https://fonts.google.com/specimen/Outfit) and
   [Kalam](https://fonts.google.com/specimen/Kalam) (OFL); see
   [`THIRD_PARTY_NOTICES.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/THIRD_PARTY_NOTICES.md).
 

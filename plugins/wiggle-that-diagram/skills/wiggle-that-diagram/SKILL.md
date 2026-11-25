@@ -1,20 +1,23 @@
 ---
 name: wiggle-that-diagram
-description: "Use when someone asks to animate an illustration in an HTML slide deck or HTML report, show how a mechanism, workflow or data flow works step by step, make an explainer animation for a slide, slow an animation down because it is too fast to read, add captions to one, or offer three animation styles to pick from. Builds one captioned, looping, self-contained file per mechanism that drops into an iframe srcdoc (step rail, reduced motion, deck-safe input forwarding), in three formats: A diagram clip (huashu engine, text-free video + HTML labels), B whiteboard (huashu y3), C live SVG + GSAP with a virtual camera."
+description: "Use when someone asks to animate an illustration in an HTML slide deck or HTML report, show how a mechanism, workflow or data flow works step by step, make an explainer animation for a slide, slow an animation down because it is too fast to read, add captions to one, or offer three animation styles to pick from. Builds one captioned, looping, self-contained file per mechanism that drops into an iframe srcdoc (step rail, reduced motion, deck-safe input forwarding), in three formats: A diagram clip (huashu engine, text-free video + HTML labels), B whiteboard (huashu y3), C live SVG + GSAP with a virtual camera. Also style D: a 1-3 minute silent promo or explainer film with words on screen, rendered to MP4 from one SVG page (a kit of shapes, one idea per shape), including a real-client cut and a public cut from one file. Use for \"make a promo video\", \"an explainer film\", \"a video for the team\"."
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.3.1"
+  version: "1.4.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
 
-# wiggle-that-diagram: explainer motion in three styles
+# wiggle-that-diagram: explainer motion in three loop styles, plus a long film
 
 Turn one static "how it works" illustration into a short, captioned, looping animation that sits inside an
 HTML deck or report, and offer it in three formats so the reader can pick. The method was worked out on a
 real client deck (see "Worked example"). It uses `huashu-art-motion` for direction (shot lists,
 camera rules, the six ways to fail) and, for styles A and B, as the rendering engine.
+
+**Asked for a film, not a slide animation** (a 1–3 minute promo or explainer, silent, words on screen, an MP4)?
+Go to "Style D: a long film" below and `references/long-film.md`; the rest of this file is about loops in a deck.
 
 ## When to use it, and when not
 
@@ -23,6 +26,8 @@ Use it when:
   should *see it happen*, step by step, with words they can read;
 - the user wants options in genuinely different formats, not three colour schemes of one;
 - an earlier animation was "too fast to read" or needs captions.
+
+- someone wants a 1–3 minute silent promo or explainer film with words on screen (style D).
 
 Do not use it for: a single micro-interaction (use `animate`), a narrated video with voice-over (use
 `huashu-art-motion` directly), or a chart of numbers (use `dataviz`).
@@ -125,6 +130,37 @@ Each step ends with the check that proves it is done.
 8. **Hand over.** Show the three styles side by side (stills or a switcher page), with the loop lengths, sizes,
    what was invented on the picture (for the user to confirm), and what was not checked.
 
+## Style D: a long film (1–3 minutes, one SVG page, rendered to MP4)
+
+A promo or explainer *film*: 10–20 shots, silent, a caption per shot, delivered as an MP4. The full method, with
+the reason behind every rule, is `references/long-film.md`; the positive example is `examples/loop-promo/film.html`
+(a 2-minute promo, read its source). In one paragraph each:
+
+1. **Story before look.** One hero object travels through one world; the process steps are places in it, not slides.
+   Hard cuts between shots, the camera moves inside them. A fixed step rail with one panel per step read as "an
+   animated slide deck"; the same content as one card riding one loop "tells the story more clearly".
+2. **One idea, one shape, the same shape every time it recurs.** A list is printed tape, a score is a dial, feedback
+   is a sticky note, a call is a voice waveform, an idea is a bulb, a check by someone else is a magnifying glass, two
+   results agreeing is a balance, a condition is a lamp. A first cut drawn as rounded boxes with text was sent back as
+   "too card based"; redrawing each idea as its own object fixed it without changing a word.
+3. **Words in one place, per cut** (`STR.public`, `STR.internal`, chosen by `?v=`). For a cut with a real client's
+   lines: verbatim, attributed and dated, an AI agent's words labelled as the agent's, your framing outside the quote
+   marks, invented figures labelled "example", a small tag per shot naming the run it came from.
+4. **Fact-check every real line, and whether each shot shows something that happened, BEFORE the first full render.**
+   True quotes did not make a true picture: 118 of 118 quotes were real and six shots still overclaimed.
+5. **Contact sheet of every shot in every cut**, then **durations from the words actually drawn**
+   (`film_beats.js` → `fit_durs.py` → `pace_check.py`), then render, gate, deliver, one cold reviewer.
+
+```sh
+python3 <skill>/scripts/style-d/new_film.py my-film            # kit.js, fonts/, a plumbing-only film.html
+cd my-film
+uv run --with playwright --with pillow python <skill>/scripts/style-d/render.py film.html --per-shot --out sheet-public
+#   -> sheet-public.png (one still per shot) + a list of labels the frame cuts; look at both, for every cut
+node <skill>/scripts/style-d/film_beats.js film.html             # beats.<cut>.json from what is drawn, + advisories
+python3 <skill>/scripts/style-d/fit_durs.py beats.public.json    # paste into DURS, then pace_check.py: ALL OK
+uv run --with playwright python <skill>/scripts/style-d/render.py film.html --video film.mp4 --variant public
+```
+
 ## Host side: all nine in one slide with a switcher (`scripts/deck/`)
 
 What the worked deck does, and what broke on the way:
@@ -172,6 +208,10 @@ worked example the brief's 18–34 s targets were impossible (captions alone nee
 agents chose the reading rule and built 35–82 s loops, which nobody had confirmed with the user. Shorter loops
 mean shorter captions, changed once in `beats.json` for all styles.
 
+Count the picture words from what is drawn, not from a list kept by hand. On the style D film a hand list drifted
+four times and every drift was a pacing failure found late; `style-d/film_beats.js` reads the rendered SVG instead,
+and on its first run it found five shots 0.2–1.2 s short that the hand list had passed.
+
 ## Embed contract, size and phones (summary; full text in `references/embed-contract.md`)
 
 - One self-contained HTML file per film, loaded by the host into `<iframe srcdoc>`. Picture + caption strip +
@@ -203,6 +243,9 @@ conflict all agents raise (here: loop length).
 - The blue-purple gate stayed green on a dark navy deck; no override was needed.
 - Style C: fit camera frames to the aspect before interpolating; use sine, not power2; wrap translated SVG
   elements before GSAP animates them.
+- Style D: a fact-check that arrives after rendering throws the render away (twice in the worked example); a font
+  that is not bundled renders silently in a fallback (`render.py` now stops instead); a camera pan at the end of a
+  shot crops the labels on the far side, so check the END still of every shot.
 
 ## Scripts
 
@@ -230,10 +273,12 @@ switcher page playing all six films in real Chrome at 1280 and 390 px.
 | `style-b/kit.js`, `build_beats.py`, `build_html.py`, `test_contract.py`, `player.html` | Style B pipeline: board kit, timing bridge, encode + inline, contract test |
 | `style-c/shell.html`, `shell.css`, `head.js`, `tail.js`, `build.py`, `test_contract.py`, `camdbg.py`, `widthcheck.py` | Style C runtime, builder (`--css` theme), contract + timing test, camera and width checks |
 | `style-c/gif.py` | GIF of one beat (or a PNG still) from a built style C film, by seeking in real Chrome |
+| `style-d/kit.js`, `film_skeleton.html`, `new_film.py`, `render.py`, `film_beats.js`, `fit_durs.py`, `fonts/` | Style D: the shape kit and film plumbing, a plumbing-only start, stills / per-shot sheet with a cut-label check / MP4 renderer (stops if the font is missing), word count from the drawn SVG, durations that pass the reading rule, Outfit (OFL) |
+| `examples/loop-promo/film.html` | Style D worked example: a 2-minute promo, 16 shots, public cut only |
 | `examples/pizza/`, `examples/expenses/` | Two neutral films in all three styles to start from: `beats.json`, `style-a/` (scene, eras, meta), `style-b/` (board, eras), `style-c/` (SVG, timeline, theme where used) |
 | `deck/embed_anims.py`, `howtest.py`, `howtest2.py` | Host side: embed all films + switcher slide + zoom-to-fit into a stacked-slide deck; tests (labels and anchor ids are the worked deck's, change first) |
 
-Dependencies: `uv`, Google Chrome, ffmpeg (styles A and B), Pillow for contact sheets, the
+Dependencies: `uv`, Google Chrome, ffmpeg (styles A, B and D), node (style D), Pillow for contact sheets, the
 `huashu-art-motion` skill (engine for A and B, `film_gate.py`, `storyboard_lint.py`).
 
 ## Worked example
@@ -258,7 +303,19 @@ example").
   the rendering engine for styles A and B (t1_3b1b and y3_whiteboard grammars). This skill's style A and B
   scripts are written to run inside a copy of that engine. Its licence notice is in `THIRD_PARTY_NOTICES.md`.
 - **[GSAP](https://gsap.com)** (GreenSock, now part of Webflow), loaded from cdnjs at runtime by style C; not bundled.
-- **Fonts** loaded at runtime, not bundled: [Outfit](https://fonts.google.com/specimen/Outfit) and
-  [Kalam](https://fonts.google.com/specimen/Kalam) (SIL Open Font License).
+- **Fonts:** [Outfit](https://fonts.google.com/specimen/Outfit) and [Kalam](https://fonts.google.com/specimen/Kalam)
+  (SIL Open Font License) load at runtime for styles A–C; Outfit is bundled for style D in
+  `scripts/style-d/fonts/` with its licence, so a film never renders in a fallback font.
 - **Made by** Huiyan Wan with **Claude** (Anthropic), in Claude Code: Claude ran the build as parallel agents (one per
   style, plus independent reviewers) and wrote this skill from what worked and what broke.
+
+## Changelog
+
+- **1.4.0** (2026-11-25): style D, a 1–3 minute silent film rendered to MP4 from one SVG page. Adds the shape kit
+  (`kit.js`: tape, dial, sticky note, waveform, dot figure, bulb, lens, balance, lamp, ring track, robot, the hero
+  card), the renderer that stops on a missing font, a word count from the drawn SVG (`film_beats.js`) and
+  `fit_durs.py`, the bundled Outfit font, the `loop-promo` example, and `references/long-film.md` with the method and
+  every lesson from three versions of a real promo: story before look, one idea one shape, real-line rules, fact-check
+  before rendering, contact sheets of every cut. `render.py --per-shot` makes the sheet and lists labels cut by the
+  frame. Tested cold by a fresh agent on a new topic; its findings are folded into the guide.
+- Versions 1.0–1.3 (5–6 Nov 2026) kept no changelog; the "Worked example" and "Scripts" sections record what they shipped.

@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Regular.ttf);font-weight:400}
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Bold.ttf);font-weight:700}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0f1420}
+svg text{font-family:Outfit,sans-serif}
+</style></head><body>
+<svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="kit.js"></script>
+<script>
+// Plumbing only. Replace the two placeholder shots with your own; keep the structure:
+// 1. every on-screen word lives in STR (one object per cut: ?v=public, ?v=internal, ...);
+// 2. DURS holds one duration per shot per cut, set from pace_check.py, never by feel;
+// 3. each shot(u => ...) returns the picture for shot-local time u and calls cap() once (and mini() if the film has a map).
+const V=(new URLSearchParams(location.search).get('v'))||'public';
+const STR={public:{cap:{one:'Replace this caption.',two:'Each shot gets one short caption.'}}};
+const S=STR[V]||STR.public;
+const DURS={public:[5,5]};
+setupFilm({durs:DURS[V]||DURS.public, header:'your header'});
+
+shot(u=>{const k=eo(p(u,0.2,1.4));
+ const g=docCard(L(-300,CX,k),CY,1.1,{label:'Draft'});
+ return G(g,cam(L(1,1.05,eio(p(u,0,5))),CX,CY))+cap(S.cap.one,u)});
+shot(u=>{const g=docCard(CX,CY,1.1,{label:'Draft',stamp:'checked',stampK:eo(p(u,1.5,2.0))});
+ return G(g,cam(L(1.05,1,eio(p(u,0,5))),CX,CY))+cap(S.cap.two,u)});
+
+renderFrame(0);
+</script></body></html>
