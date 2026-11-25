@@ -103,7 +103,16 @@ Read that film's source before writing your own: it is the positive example for 
 8. **Render, then gate, then deliver.** `render.py film.html --video film.mp4 --variant <cut>` per cut, one after the
    other in the background. Then huashu's `deliver.py` (it runs the film gate, refuses red, copies the film and
    writes `交付说明.md`), then append your own notes section after it (it rewrites the file), then `deliver.py --verify`.
-   → Check: gate is green or yellow, and every yellow item is explained in the notes.
+   → Check: gate is green or yellow, and every yellow item is explained in the notes. A red on fast motion alone is the
+   exception below.
+   - A film that holds still for reading can go red on fast motion and still be the right film. The gate counts a frame
+     pair as fast only when the whole frame's mean grey changes by 9 or more (12 fps, 320 wide), so on a dark frame
+     with small elements a slow push or glide scores nothing. Worked example: lengthening shots for reading took it
+     from yellow (0.037) to red (0.005, then 0.011 with 12% pushes). `setupFilm({accents})` adds one quick push per
+     shot, aimed at what just arrived, and 30% pushes got it to yellow (0.038), but at each peak edge labels were
+     cropped for about 0.2 s and the gate read 9 of them as cuts. The owner watched both side by side and chose calm.
+     So: render a short side-by-side of calm and accented, let the person choose, and if calm, deliver with the red
+     written into the notes (`deliver.py` refuses red, so copy the film yourself).
 
 9. **One cold reviewer.** A cheap agent that sees only frames sampled every ~3 s, no source, no brief. Fix what it
    misreads; record what you leave and why.
@@ -144,6 +153,7 @@ Read that film's source before writing your own: it is the positive example for 
 | `deliver.py` rewrites the notes | your notes section disappears | append it after `deliver.py`, then `deliver.py --verify` |
 | A peer agent's reply never arrives | you wait on a fact-check that was sent to a busy session | read the other session's transcript instead of waiting |
 | Gate red: fast-motion | long reading holds | camera inside the shot (step 4); a yellow on "few cuts per 10 s" is expected and is explained, not fixed |
+| Still red after the camera moves | the gate's fast measure ignores small motion on a dark frame | show calm vs `accents` side by side and let the person choose (step 8); never add motion silently |
 
 ## Timings and sizes (worked example, M-series Mac)
 

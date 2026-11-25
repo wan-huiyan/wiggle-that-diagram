@@ -131,7 +131,8 @@ function cap(text,u,t0=0.4,size=50){CAP=text;const k=eo(p(u,t0,t0+0.5));if(k<=0)
  OVER+=`<defs><clipPath id="cc"><rect x="100" y="950" width="${w*k+30}" height="100"/></clipPath></defs>`+`<rect x="112" y="986" width="26" height="26" rx="4" fill="${C.gold}" transform="rotate(${(1-k)*90} 125 999)"/>`+`<g clip-path="url(#cc)">${T(164,1012,text,{size,wt:700,fill:C.cap})}</g>`;return ''}
 
 // ---------- the film: shots, durations per cut, one render(t) ----------
-// setupFilm({durs:[...], header:'...', tags:[...] (optional small line under the header, per shot), stage:{y:130,h:800,scale:1.1,cy:540}})
+// setupFilm({durs:[...], header:'...', tags:[...] (optional small line under the header, per shot), stage:{y:130,h:800,scale:1.1,cy:540},
+//            accents:[...] (optional, per shot: when the shot's key thing lands, a quick push that settles; see renderFrame)})
 // The stage is the band between header and caption; the picture is clipped to it, so a camera push never covers either.
 // shot(fn): fn(u) returns the picture's SVG for shot-local time u (seconds) and calls cap()/mini() for the overlay.
 const SH=[];let FILM={durs:[],header:'',tags:null,stage:{y:130,h:800,scale:1.1,cy:540}},_t=0,DUR=0;
@@ -139,10 +140,19 @@ function setupFilm(o){FILM=Object.assign(FILM,o);SH.length=0;_t=0}
 function shot(fn){const d=FILM.durs[SH.length];if(d==null)throw new Error('setupFilm durs has no entry for shot '+(SH.length+1));SH.push({a:_t,b:_t+d,fn});_t+=d;DUR=_t}
 function renderFrame(t){TID=0;t=((t%DUR)+DUR)%DUR;const i=Math.max(0,SH.findIndex(s=>t>=s.a&&t<s.b)),sh=SH[i],u=t-sh.a;
  OVER='';CAP='';const pic=sh.fn(u);const st=FILM.stage;
+ // accents[i] = t0, or [t0, amount, sx, sy], or a list of those: a quick push (0.22 s) that settles back (0.7 s) at u=t0,
+ // about the point (sx, sy) in SCREEN pixels as read off a still (default: stage centre; amount default .3). Aim it at the
+ // thing that just arrived: a push about the centre shoves edge labels off screen. Framing at rest is unchanged, so the
+ // per-shot sheet is too. This is the in-shot fast motion huashu's film gate counts (see long-film.md, step 8).
+ let pk=pic;const acs=FILM.accents&&FILM.accents[i];
+ for(const ac of acs==null?[]:Array.isArray(acs)&&Array.isArray(acs[0])?acs:[acs]){
+  const [t0,amt0,sx,sy]=[].concat(ac),amt=amt0??.3,scy=st.cy??(st.y+st.h/2),fx=sx==null?CX:CX+(sx-CX)/st.scale,
+   fy=sy==null?CY:CY+(sy-scy)/st.scale,q=u-t0,k=q<0?0:q<.22?1-(1-q/.22)**3:q<.92?1-eio((q-.22)/.7):0;
+  if(k>0)pk=`<g transform="translate(${fx} ${fy}) scale(${1+amt*k}) translate(${-fx} ${-fy})">${pk}</g>`}
  const tag=FILM.tags&&FILM.tags[i]?T(110,124,FILM.tags[i],{size:20,wt:700,fill:C.mut}):'';
  const svg=`<rect width="${W}" height="${H}" fill="${C.bg}"/><defs><radialGradient id="g1" cx=".82" cy=".1" r=".6"><stop offset="0" stop-color="${C.teal}" stop-opacity=".10"/><stop offset="1" stop-color="${C.teal}" stop-opacity="0"/></radialGradient><radialGradient id="g2" cx=".1" cy=".9" r=".5"><stop offset="0" stop-color="${C.gold}" stop-opacity=".08"/><stop offset="1" stop-color="${C.gold}" stop-opacity="0"/></radialGradient><clipPath id="stg"><rect x="0" y="${st.y}" width="${W}" height="${st.h}"/></clipPath></defs><rect width="${W}" height="${H}" fill="url(#g1)"/><rect width="${W}" height="${H}" fill="url(#g2)"/>`
   +(FILM.header?T(110,96,FILM.header,{size:30,wt:700,fill:C.gold}):'')+tag
-  +`<g clip-path="url(#stg)"><g transform="translate(${CX} ${st.cy??(st.y+st.h/2)}) scale(${st.scale}) translate(${-CX} ${-CY})">`+pic+`</g></g>`+OVER;
+  +`<g clip-path="url(#stg)"><g transform="translate(${CX} ${st.cy??(st.y+st.h/2)}) scale(${st.scale}) translate(${-CX} ${-CY})">`+pk+`</g></g>`+OVER;
  if(typeof document!=='undefined'){const el=document.getElementById('v');if(el)el.innerHTML=svg}
  return {svg,pic,over:OVER,cap:CAP,shot:i}}
 if(typeof window!=='undefined')window.render=t=>{renderFrame(t)};   // render.py calls render(t) and reads DUR
