@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.5.0"
+  version: "1.6.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -139,9 +139,11 @@ the reason behind every rule, is `references/long-film.md`; the positive example
 1. **Story before look.** One hero object travels through one world; the process steps are places in it, not slides.
    Hard cuts between shots, the camera moves inside them. A fixed step rail with one panel per step read as "an
    animated slide deck"; the same content as one card riding one loop "tells the story more clearly".
-2. **One idea, one shape, the same shape every time it recurs.** A list is printed tape, a score is a dial, feedback
-   is a sticky note, a call is a voice waveform, an idea is a bulb, a check by someone else is a magnifying glass, two
-   results agreeing is a balance, a condition is a lamp. A first cut drawn as rounded boxes with text was sent back as
+2. **One idea, one shape, the same shape every time it recurs**, picked from what the idea does (flows into one
+   place, builds up, gets sorted, is handed over, crosses a threshold) in a world that fits the subject. In the
+   worked example a list is printed tape, a score is a dial and feedback is a sticky note; those are one film's
+   choices, not a menu. For a data story, find the one sentence and the numbers that carry it first, and draw every
+   number in proportion (step 1b). A first cut drawn as rounded boxes with text was sent back as
    "too card based"; redrawing each idea as its own object fixed it without changing a word.
 3. **Words in one place, per cut** (`STR.public`, `STR.internal`, chosen by `?v=`). For a cut with a real client's
    lines: verbatim, attributed and dated, an AI agent's words labelled as the agent's, your framing outside the quote
@@ -321,6 +323,14 @@ example").
 
 ## Changelog
 
+- **1.6.0** (2026-11-25): makes style D generic for data stories, after a cold test on two new subjects. Shapes are
+  picked by what the idea does (a new table), and the two films' choices are labelled examples, not a menu. A new
+  step 1b: one sentence with one claim, at most three numbers that each quote it, charts built from the world's own
+  objects (new kit helper `units()`), honest proportions. The hero must act in every shot it is in. One shape per
+  kind of quantity. The palette is swappable (`window.KIT_THEME`, now also setting the page background; light-ground
+  keys documented). `film_beats.js` now counts each number left on screen as its own word (two side by side were
+  one). Safe area under a camera push, mid-shot stills for motion shots, and a rule that a cold-test subject must
+  not be named in the skill.
 - **1.5.0** (2026-11-25): lessons from a second style D build, a short film about a client's data for an internal
   audience. `long-film.md` gains step 0 (three directions on the same two shots), reviewers chosen by who appears in
   the film (step 9, with a frame-pull script), a section on showing someone's data in public, six data-story shapes
