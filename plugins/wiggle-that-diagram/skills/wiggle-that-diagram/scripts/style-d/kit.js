@@ -126,12 +126,17 @@ let OVER='',CAP='';
 function mini(stations,active,k=1){const cx=1790,cy=96,r=42,n=stations.length;let g=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${C.line}" stroke-width="8"/>`;
  stations.forEach(([num,name,col],i)=>{const [x,y]=stPos(cx,cy,r,i,n);g+=`<circle cx="${x}" cy="${y}" r="${i===active?12:7}" fill="${i===active?col:C.mut}" opacity="${i===active?1:.6}"/>`});
  const [num,name,col]=stations[active];g+=T(cx-r-26,cy+10,num+'  '+name,{size:28,wt:700,fill:col,a:'end'});OVER+=G(g,`translate(0 ${L(-30,0,k)})`,k);return ''}
-// the caption: wipes in at shot time t0; one per shot
-function cap(text,u,t0=0.4,size=50){CAP=text;const k=eo(p(u,t0,t0+0.5));if(k<=0)return '';const w=tw(text,size)*1.08+60;
+// the caption: arrives at shot time t0; one per shot. Default: wipes in left to right. setupFilm({capMode:'fade'}) fades it
+// in whole instead, so no frame (a still, a paused projector, a review frame) shows half a sentence.
+function cap(text,u,t0=0.4,size=50){CAP=text;
+ if(FILM.capMode==='fade'){const k=eo(p(u,t0,t0+0.6));if(k<=0)return '';
+  OVER+=`<g opacity="${k.toFixed(3)}"><rect x="112" y="986" width="26" height="26" rx="4" fill="${C.gold}"/>${T(164,1012,text,{size,wt:700,fill:C.cap})}</g>`;return ''}
+ const k=eo(p(u,t0,t0+0.5));if(k<=0)return '';const w=tw(text,size)*1.08+60;
  OVER+=`<defs><clipPath id="cc"><rect x="100" y="950" width="${w*k+30}" height="100"/></clipPath></defs>`+`<rect x="112" y="986" width="26" height="26" rx="4" fill="${C.gold}" transform="rotate(${(1-k)*90} 125 999)"/>`+`<g clip-path="url(#cc)">${T(164,1012,text,{size,wt:700,fill:C.cap})}</g>`;return ''}
 
 // ---------- the film: shots, durations per cut, one render(t) ----------
 // setupFilm({durs:[...], header:'...', tags:[...] (optional small line under the header, per shot), stage:{y:130,h:800,scale:1.1,cy:540},
+//            capMode:'wipe'|'fade' (optional, default 'wipe'; see cap()),
 //            accents:[...] (optional, per shot: when the shot's key thing lands, a quick push that settles; see renderFrame)})
 // The stage is the band between header and caption; the picture is clipped to it, so a camera push never covers either.
 // shot(fn): fn(u) returns the picture's SVG for shot-local time u (seconds) and calls cap()/mini() for the overlay.
