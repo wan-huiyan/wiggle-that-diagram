@@ -53,6 +53,16 @@ style_c_rebuild() {
 style_c_rebuild pizza theme.css
 style_c_rebuild expenses            # default theme, no --css
 
+# Style D: count the words the example film actually draws, then the reading-pace gate must pass on every shot.
+style_d_pace() { local out
+  out=$(node $WIG/scripts/style-d/film_beats.js $WIG/examples/loop-promo/film.html --out "$TMP" 2>&1) \
+    || { fail "style D film_beats.js on examples/loop-promo" "$(printf '%s\n' "$out" | tail -6)"; return; }
+  out=$("$PY" $WIG/scripts/common/pace_check.py "$TMP/beats.public.json" 2>&1)
+  if [ $? -eq 0 ]; then pass "style D example film passes the reading-pace gate (film_beats.js + pace_check.py)"
+  else fail "style D example film fails the reading-pace gate" "$(printf '%s\n' "$out" | tail -8)"; fi
+}
+style_d_pace
+
 # The version lives in three places; they must agree.
 versions() { "$PY" - <<'PY'
 import json, re, sys

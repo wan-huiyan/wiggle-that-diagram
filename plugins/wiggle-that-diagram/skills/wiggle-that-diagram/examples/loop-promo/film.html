@@ -1,0 +1,239 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;src:url(../../scripts/style-d/fonts/Outfit-Regular.ttf);font-weight:400}
+@font-face{font-family:Outfit;src:url(../../scripts/style-d/fonts/Outfit-Bold.ttf);font-weight:700}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0f1420}
+svg text{font-family:Outfit,sans-serif}
+</style></head><body>
+<svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script src="../../scripts/style-d/kit.js"></script>
+<script>
+// Worked example for style D: a 2-minute silent promo for two Claude skills that run as one loop
+// (https://github.com/wan-huiyan/dig-till-done). Read it as a positive example of the guide's rules, not as a template:
+//  - one hero object (the draft card) travels through one world (the loop track); steps are places, not slides;
+//  - each idea has one shape: tape = a list, dial = a score, sticky note = feedback, waveform = a call, bulb = an idea,
+//    drill = analysis, wall with a slot = separation of duties, balance = two results agreeing, lamp = a condition;
+//  - every on-screen word a cut would change is in STR; durations come from film_beats.js + pace_check.py.
+// The real build also had an internal cut with a client's lines (?v=internal); it is not shipped.
+const V=(new URLSearchParams(location.search).get('v'))||'public';
+const STR={
+ public:{
+  react:'Is this what I asked?',
+  calls:['Call 1','Call 2'],
+  quotes:['Which ones first?','Show it per month.','Can I trust this number?'],
+  ask:['“What did the ones who','said yes do first?”'], askWho:'',
+  drafted:['Draft v1 answers','a different group'],
+  rows:[['M01','Which ones first?','Call 1'],['M02','Show it per month.','Call 1'],['M03','Can I trust this number?','Call 2'],['M04','What do we do next week?','Call 2']],
+  people:['Main contact','Data expert'], standinTag:'', callLen:['60 min','60 min'],
+  ideas:[['Rank the actions by effect','dig'],['Add a per-month table','page edit']],
+  digName:'query', digFound:'ranked actions',
+  blind:['dig 40','redone 40','match'], blindNote:'example figures',
+  asks2:['Which do I do first?','Do these numbers add up?'], askedBy:'', scores:[3,2,3], scoreNote:'example scores',
+  review:{slide:'slide 3',roles:['decides: can I act on it this month?','checks: does it match my numbers?'],
+   sc:[[3,2],[4,3]], q:['Which do I do first?','Do these numbers add up?'], qNote:['',''],
+   fb:['lead with the action','show the total it comes from'], fbNote:['',''],
+   fixes:['slide 3: lead with the action','slide 3: show the total','slide 5: name the group'], before:[3,2], after:[4,4],
+   rr:['round 1','round 2'], note:'example scores and fixes'},
+  bornCalls:['Call 1','Call 2'], bornLen:['60 min','60 min'], bornNote:'every claim tied to a dated quote; guesses marked inferred',
+  wrong:{title:'Now: 40 against 25',old:58,now:40,other:25,note:'example figures',who:'a stand-in flagged this slide'},
+  newq:'Is my name on this?', newqRow:['S01','Is my name on this?','stand-in, round 1'],
+  verdict:'First deck that starts with what to do.', verdictWho:'a stand-in, round 4',
+  cap:{
+   pain:'Client work can miss what was asked.', scatter:'84 asks, two calls.', miss:'The draft answered a different question.',
+   list:'List requirements: their words, and the stand-ins.', born:'Stand-ins, born from hours of their own calls.', loop:'One loop. One lap is one round.',
+   brain:'Brainstorm: what would close each open ask?', dig:'Dig: run it, rebuild, trace every figure.',
+   vlist:'Verify: the builder never marks its own work.', vint:'Verify: each stand-in scores, asks and gives feedback.', vfix:'Feedback becomes our robot\'s fix list. Then they re-read.',
+   wrong:'Checks passed. The picture was wrong.', back:'Back to brainstorm: their questions become rows.',
+   rounds:'Round after round, until it stops.', stop:'Stop: nothing left to close, every slide 4+.',
+   end:'Two skills, one loop. Start at either.'},
+  link:'github.com/wan-huiyan/dig-till-done'
+ }
+};
+const S=STR[V]||STR.public;
+// film-local wrappers over the kit, so every call site stays short
+const draft=(x,y,s,o={})=>docCard(x,y,s,Object.assign({label:'Draft'},o));
+const qcard=quote, SIL=FIGURE_DOTS, STICKY=C.sticky;
+const tapeK=tape;   // the film's own defaults for its checklist tape:
+function tapeList(x,y,rows,o={}){const more=o.more===true?'… 80 more, each with its quote':o.more;return tapeK(x,y,rows,Object.assign({title:'Checklist',count:'84 asks',idCol:id=>id[0]==='S'?C.pteal:C.pgold,statusWords:o.plain?null:{met:'met',notMet:'not met'}},o,{more}))}
+const dial=(x,y,v,lab,col,o={})=>gauge(x,y,v,lab,col,Object.assign({mark:4},o));
+const DURS={public:[6.5, 7.0, 6.0, 11.5, 9.5, 6.5, 7.5, 6.5, 10.5, 11.5, 9.0, 7.0, 6.5, 6.5, 6.0, 8.0]};
+setupFilm({durs:DURS[V]||DURS.public, header:'/dig-till-done + /client-stand-ins'});
+
+// the loop track: five stations
+const STN=[['1','List requirements',C.gold],['2','Brainstorm',C.gold],['3','Dig',C.gold],['4','Verify',C.teal],['5','Back to brainstorm',C.gold]];
+
+
+// 1 the pain: the draft card slides onto an empty track; the client's reaction
+shot(u=>{const k=eo(p(u,0.1,1.3));
+ let g=track(CX,CY,300,STN,{drop:0,op:.55})+draft(L(-300,CX,k),CY,1.15,{rot:L(-12,0,k),label:'Draft v1'});
+ g+=avatar(1560,250,C.teal,1.1)+bubble(1230,180,S.react,p(u,1.8,2.3),{size:34,tail:'right',who:S.reactWho||''});
+ return G(g,cam(L(1,1.06,eio(p(u,0,5.5))),CX,CY))+cap(S.cap.pain,u)});
+// 2 asks scatter out of two call tiles
+const scat=i=>({x:180+((i*137)%1480)+rnd(i+9)*80,y:380+((i*61)%260)+rnd(i+3)*40,r:-24+rnd(i+5)*48});
+const BIG=[[440,720,-4],[960,780,3],[1480,720,-3]];
+shot(u=>{let g='',top='';const tiles=[[440,230],[1480,230]];
+ for(let i=0;i<20;i++){const src=tiles[i%2],q=scat(i),k=eo(p(u,0.3+i*0.07,1.4+i*0.07));if(k<=0)continue;
+  const big=i<3,tx=big?BIG[i][0]:q.x,ty=big?BIG[i][1]:q.y,tr=big?BIG[i][2]:q.r;
+  const c=qcard(L(src[0],tx,k),L(src[1],ty,k)-Math.sin(k*Math.PI)*120,tr*k,big?1:0.8,{col:i%3?C.gold:C.teal,text:big?S.quotes[i]:null,op:big?1:.6});if(big)top+=c;else g+=c}
+ g+=top;g+=wave(290,250,S.calls[0],{w:300,ph:u})+wave(1330,250,S.calls[1],{w:300,ph:u+2});
+ return G(g,cam(1,CX,CY,L(40,-60,eio(p(u,0,5.5))),0))+cap(S.cap.scatter,u,1.2)});
+// 3 the ask that does not fit
+shot(u=>{let g=draft(700,470,1.6,{face:S.drafted,faceSize:S.faceSize,label:'Draft v1'});
+ g+=R(960,410,64,120,{r:10,fill:C.bg,stroke:C.ink,sw:5});
+ const t1=eo(p(u,0.4,1.4)),bump=p(u,1.4,2.2),back=eo(p(u,2.5,3.5));
+ const ax=L(1760,1060,t1)+Math.sin(bump*Math.PI*6)*(1-bump)*24+back*140;
+ const AS=S.askSize||32,askW=Math.max(...S.ask.map(l=>tw(l,AS)))*1.08+70;
+ const ask=R(0,-74,askW,148,{r:20,fill:C.card,stroke:C.gold,sw:4})+`<path d="M2 -40 L-60 0 L2 40Z" fill="${C.card}" stroke="${C.gold}" stroke-width="4"/>`+S.ask.map((l,i)=>T(34,-14+i*44,l,{size:AS,wt:700})).join('')+(S.askWho?T(34,112,S.askWho,{size:22,fill:C.mut,wt:700}):'');
+ g+=G(ask,`translate(${ax} 470) rotate(${back*6})`);
+ if(bump>0&&bump<1)g+=`<g stroke="${C.red}" stroke-width="7" stroke-linecap="round">`+[0,1,2].map(i=>`<path d="M1040 ${420+i*50} l34 ${-16+i*16}"/>`).join('')+`</g>`;
+ return G(g,cam(L(1,1.08,eio(p(u,0,6))),1000,470))+cap(S.cap.miss,u,1.6)});
+// 4 list requirements: the asks print onto the checklist tape; the same calls build the stand-ins
+shot(u=>{let g='';const X=620,Y=150,TW=S.rowW||660;
+ g+=tapeList(X,Y,S.rows,{unroll:eo(p(u,0.4,2.0)),rowK:i=>eo(p(u,0.9+i*0.15,1.4+i*0.15)),more:true,w:TW});
+ for(let i=0;i<14;i++){const q=scat(i),k=eo(p(u,0.2+i*0.06,1.0+i*0.06));if(k>=1)continue;const row=i<4;
+  g+=qcard(L(q.x,row?X+330:X+200,k),L(q.y,row?Y+90+i*68:Y+400,k),q.r*(1-k),L(.8,.4,k),{op:1-k*.5})}
+ g+=wave(110,290,S.calls[0],{w:280,ph:u})+wave(110,550,S.calls[1],{w:280,ph:u+2});
+ [[1560,300,C.teal],[1560,560,C.gold]].forEach(([x,y,c],i)=>{const kk=eo(p(u,3.0+i*0.4,4.0+i*0.4));if(kk<=0)return;
+  g+=`<path d="M400 ${290+i*260} C 520 ${130+i*560}, 1380 ${120+i*580}, ${x-60} ${y}" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="8 8" opacity="${kk*.8}"/>`;
+  g+=G(avatar(0,0,c,1.1)+T(0,82,S.people[i],{size:24,wt:700,a:'middle'})+(S.standinTag?T(0,110,S.standinTag,{size:18,a:'middle',fill:C.mut}):''),`translate(${x} ${y}) scale(${kk})`,kk)});
+ g+=T(1468,472,'stand-ins, from the same calls',{size:22,wt:700,fill:C.mut,a:'start',op:p(u,4.2,4.7)});
+ return G(g,cam(L(1.1,1,eio(p(u,0,4.5))),CX,CY))+mini(STN,0,p(u,0,.6))+cap(S.cap.list,u,0.8)});
+// 4b the stand-ins are born: each person's own lines lift out of hours of call audio and assemble two people
+shot(u=>{let g='';const WX=160,WW=620,WY=[330,590],NB=40;
+ const spk=i=>{const r=rnd(i*3+1);return r<0.3?0:r<0.55?1:2}; // 0 main contact, 1 data expert, 2 us
+ [0,1].forEach(c=>g+=wave(WX,WY[c],S.bornCalls[c],{w:WW,n:NB,h:70,off:u*5+c*300,sp:i=>spk(i+c*977),len:S.bornLen[c],ph:0}));
+ const ek=p(u,1.0,1.6);g+=G(`<rect x="0" y="0" width="36" height="26" rx="4" fill="none" stroke="${C.mut}" stroke-width="3"/><path d="M2 3 L18 15 L34 3" stroke="${C.mut}" stroke-width="3" fill="none"/>`,`translate(${WX} 700)`,ek)+T(WX+50,722,'+ call notes and email',{size:22,fill:C.mut,op:ek});
+ const PX=[1170,1580],PY=380,N=24,per=N/2,got=[0,0],col=[C.teal,C.gold];
+ for(let k=0;k<N;k++){const c=k%2,t0=0.8+k*0.25,f=eio(p(u,t0,t0+1.0));if(u>=t0+1.0){got[c]++;continue}if(f<=0)continue;
+  const src=(k>>1)%2,sx=WX+60+((k*97)%520),sy=WY[src],d=SIL[Math.min(SIL.length-1,Math.floor((k>>1)/per*SIL.length))],tx=PX[c]+d[0],ty=PY+d[1];
+  const x=L(sx,tx,f),y=L(sy,ty,f)-Math.sin(f*Math.PI)*140;g+=`<circle cx="${x}" cy="${y}" r="7" fill="${col[c]}"/><circle cx="${L(sx,tx,f*0.92)}" cy="${L(sy,ty,f*0.92)-Math.sin(f*0.92*Math.PI)*140}" r="4" fill="${col[c]}" opacity=".45"/>`}
+ [0,1].forEach(c=>{const x=PX[c],kk=got[c]/per,lit=Math.floor(kk*SIL.length);
+  SIL.forEach(([dx,dy],i)=>{g+=i<lit?`<circle cx="${x+dx}" cy="${PY+dy}" r="5.5" fill="${col[c]}"/>`:`<circle cx="${x+dx}" cy="${PY+dy}" r="3.5" fill="${C.line}"/>`});
+  const nk=eo(p(kk,0.95,1));g+=G(T(x,PY+160,S.people[c],{size:30,wt:700,a:'middle'})+T(x,PY+192,'stand-in',{size:20,wt:700,fill:col[c],a:'middle'}),'',nk)});
+ g+=T(1375,PY+250,S.bornNote||'their own dated words; the rest marked inferred',{size:24,wt:700,fill:C.mut,a:'middle',op:p(u,7.2,7.8)});
+ return G(g,cam(L(1.0,1.05,eio(p(u,0,9.5))),L(CX,975,eio(p(u,5.5,8.0))),CY))+mini(STN,0)+cap(S.cap.born,u,0.6)});
+// 5 the loop: five stations drop on the track; the draft card runs one lap
+shot(u=>{const drop=p(u,0.1,2.2);let g=track(CX,CY,280,STN,{drop,dash:-u*50});
+ const f=eio(p(u,2.4,5.6)),[x,y]=onTrack(CX,CY,280,f);g+=draft(x,y,0.42,{label:''});
+ return G(g,cam(L(1.12,0.95,eio(p(u,0,5.8))),CX,455))+cap(S.cap.loop,u,2.2)});
+// 6 brainstorm: open rows light up ideas
+shot(u=>{const TWb=S.rowW?660:560;let g=tapeList(140,200,S.brainRows||S.rows.slice(0,2),{w:TWb,hl:[STICKY,STICKY],count:'open rows'});
+ S.ideas.forEach(([text,tag],i)=>{const k=eo(p(u,0.8+i*1.4,1.5+i*1.4)),lit=eo(p(u,1.2+i*1.4,1.8+i*1.4));if(k<=0)return;const bx=140+TWb+170,by=330+i*230,ry=200+66+i*68+22;
+  g+=`<path d="M${140+TWb} ${ry} C ${170+TWb} ${ry}, ${bx-80} ${by+6}, ${bx-34} ${by+6}" fill="none" stroke="${C.gold}" stroke-width="3" stroke-dasharray="7 7" opacity="${k}"/>`;
+  g+=G(bulb(bx,by,lit,i?120:170)+T(bx+70,by+14,text,{size:27,wt:700})+T(bx+70,by+52,'→ '+tag,{size:22,wt:700,fill:tag==='dig'?C.teal:C.gold}),`translate(0 ${L(-30,0,k)})`,k)});
+ return G(g,cam(L(1,1.03,eio(p(u,2.6,4.2))),CX,CY))+mini(STN,1)+cap(S.cap.brain,u)});
+// 7 dig: drill down through the data; what it finds comes up as a file; every figure on the draft is threaded to it
+shot(u=>{let g='';const GY=360,DX=500,DEEP=330;const k0=eo(p(u,0,0.6));
+ [[GY,70,'#2a3040'],[GY+70,90,'#232a39'],[GY+160,110,'#1e2433'],[GY+270,110,'#191f2c']].forEach(([y,h,c],i)=>{g+=R(120,y,900,h,{r:0,fill:c,op:k0});for(let j=0;j<10;j++)g+=`<circle cx="${140+rnd(i*31+j)*860}" cy="${y+12+rnd(i*17+j+5)*(h-24)}" r="${2+rnd(j+i)*3}" fill="${C.mut}" opacity="${.25*k0}"/>`});
+ g+=`<path d="M120 ${GY} H1020" stroke="${C.mut}" stroke-width="3" opacity="${k0}"/>`;
+ const hit=p(u,1.5,1.7),d=eo(p(u,0.3,1.6))*DEEP,fly=eio(p(u,1.8,3.0));
+ g+=`<ellipse cx="${DX+120}" cy="${GY+DEEP+18}" rx="190" ry="16" fill="${C.gold}" opacity="${.35+.4*hit}"/>`;
+ g+=`<path d="M${DX-70} ${GY} L${DX} ${GY-130} L${DX+70} ${GY}" stroke="${C.ink}" stroke-width="6" fill="none" opacity="${k0}"/>`+R(DX-12,GY-130,24,d+130,{r:4,fill:C.ink,op:k0})+`<path d="M${DX-20} ${GY+d} L${DX+20} ${GY+d} L${DX} ${GY+d+34} Z" fill="${C.ink}" opacity="${k0}"/>`;
+ g+=T(DX-90,GY-80,S.digName,{size:28,wt:700,a:'end',op:k0});
+ if(hit>0&&u<2.4)g+=`<circle cx="${DX}" cy="${GY+DEEP+18}" r="${L(20,90,p(u,1.6,2.4))}" fill="none" stroke="${C.gold}" stroke-width="5" opacity="${1-p(u,1.6,2.4)}"/>`;
+ if(u>=1.8&&u<3.0){const x=L(DX,660,fly),y=fly<.5?L(GY+DEEP,GY-60,fly*2):L(GY-60,210,(fly-.5)*2);g+=`<circle cx="${x}" cy="${y}" r="16" fill="${C.gold}"/><circle cx="${x}" cy="${y}" r="30" fill="${C.gold}" opacity=".25"/>`}
+ const rk=eo(p(u,2.9,3.4));g+=G(fileIcon(640,176,C.teal)+T(690,208,'results.md',{size:28,wt:700})+[].concat(S.digFound).map((l,i)=>T(640,262+i*30,l,{size:23,fill:C.ink})).join(''),'',rk);
+ const k3=eo(p(u,0.4,1.2));g+=draft(L(1750,1460,k3),430,1.05,{fig:eo(p(u,3.2,4.0)),label:'Draft v2'});
+ const tk=p(u,4.0,4.6);if(tk>0){[0,1,2].forEach(i=>{const bx=1460-151+[220,170,120][i]*1.05,by=430+(-6+i*30+9)*1.05;g+=`<path d="M848 200 C 1000 ${130+i*40}, ${bx-200} ${by-160}, ${bx} ${by}" fill="none" stroke="${C.green}" stroke-width="2.5" opacity="${tk}"/>`+tick(bx+22,by,(tk-i*.2)*2,13)});
+  g+=G(tick(0,0,1,16)+T(28,10,'every figure traced to a file',{size:28,wt:700,fill:C.green}),'translate(1180 640)',tk)}
+ return G(g,cam(L(1.05,1,eio(p(u,0,6))),CX,CY,L(-40,40,eio(p(u,0,6))),0))+mini(STN,2)+cap(S.cap.dig,u)});
+// 8 verify against the list: a wall between builder and re-scorer; only the rendered draft goes through the slot; a blind check redoes a finding
+shot(u=>{let g='';
+ g+=draft(440,300,0.95,{label:'Draft v2'})+T(440,444,'built by one agent',{size:24,wt:700,fill:C.mut,a:'middle'});
+ const wk=eo(p(u,0.3,1.0)),wy=L(-500,0,wk);g+=R(900,110+wy,44,290,{r:8,fill:C.line})+R(900,500+wy,44,70,{r:8,fill:C.line});
+ const ck=eio(p(u,1.2,2.4));if(ck>0)g+=draft(L(560,1220,ck),L(330,450,Math.min(1,ck*1.6)),0.42,{label:'',stamp:'scored',stampK:p(u,3.6,3.8)>0?L(1.6,1,eo(p(u,3.6,3.9))):0});
+ const rk=eo(p(u,0.9,1.5));g+=G(avatar(1560,220,C.gold,0.95)+T(1560,300,'re-score',{size:30,wt:700,a:'middle'})+T(1560,330,'did not build it',{size:20,fill:C.mut,a:'middle'}),'',rk);
+ const lk=p(u,2.4,3.6);if(lk>0&&lk<1)g+=lens(L(1150,1290,eio(lk)),L(430,470,Math.sin(lk*Math.PI)),0.85);
+ [['met',C.green],['not met',C.amber]].forEach(([t,c],i)=>{const k=p(u,3.0+i*0.3,3.4+i*0.3);if(k>0)g+=G((i?`<path d="M-12 0 h24" stroke="${c}" stroke-width="6" stroke-linecap="round"/>`:tick(0,0,1,14))+T(26,9,t,{size:26,wt:700,fill:c}),`translate(1420 ${428+i*48})`,k)});
+ g+=T(1290,560,'scores what the client sees',{size:22,fill:C.mut,a:'middle',op:p(u,3.6,4.0)});
+ const bk2=eo(p(u,4.0,4.6)),lvl=eo(p(u,5.2,6.0));
+ g+=G(T(960,610,'Blind check · redone without seeing the answer',{size:26,wt:700,fill:C.teal,a:'middle'})+balance(960,670,L(9,0,lvl),S.blind[0],S.blind[1],{rk:p(u,4.8,5.2)})+T(960,850,S.blind[2],{size:34,wt:700,fill:S.blind[2]==='match'?C.green:C.amber,a:'middle',op:p(u,6.0,6.4)})+(S.blindNote?T(960,884,S.blindNote,{size:20,fill:C.mut,a:'middle',op:p(u,6.2,6.6)}):''),`translate(0 ${L(30,0,bk2)})`,bk2);
+ const pk=eio(p(u,3.8,4.8));return G(g,cam(L(1,1.02,pk),CX,L(CY,560,pk)))+mini(STN,3)+cap(S.cap.vlist,u)});
+// 9 verify with the interview: each stand-in has a persona, scores the slide, asks, gives feedback
+shot(u=>{const Rv=S.review;let g=draft(330,360,1.0,{label:'rendered '+Rv.slide.split(',')[0]})+T(330,500,'they read only the rendered slides',{size:22,wt:700,fill:C.mut,a:'middle'});
+ [0,1].forEach(c=>{const cx=880+c*560,col=[C.teal,C.gold][c],k0=eo(p(u,0.2+c*0.3,0.9+c*0.3));
+  let h=avatar(cx-190,190,col,.85)+T(cx-136,184,S.people[c],{size:30,wt:700})+T(cx-136,216,Rv.roles[c],{size:20,fill:C.mut});
+  const sk=eo(p(u,1.4+c*0.3,2.4+c*0.3));h+=T(cx,284,'scores · '+Rv.slide,{size:20,wt:700,fill:C.mut,a:'middle'})+dial(cx-120,380,Rv.sc[c][0]*sk,'understanding',C.teal)+dial(cx+120,380,Rv.sc[c][1]*sk,'trust',C.red);
+  const qk=p(u,3.2+c*0.4,3.7+c*0.4);h+=bubble(cx,522,Rv.q[c],qk,{size:26,col:col})+(Rv.qNote[c]?T(cx,604,Rv.qNote[c],{size:18,fill:C.mut,a:'middle',op:qk}):'');
+  const fk=eo(p(u,4.8+c*0.4,5.4+c*0.4));h+=sticky(cx,L(740,712,fk),Rv.fb[c],{w:330,rot:c?3:-3,note:Rv.fbNote[c],op:fk});
+  g+=G(h,`translate(${L(40,0,k0)} 0)`,k0)});
+ return G(g,cam(L(1,1.02,eio(p(u,0,9))),CX,CY))+mini(STN,3)+cap(S.cap.vint,u)});
+// 9b the sticky notes go into our robot, which prints a fix list, fixes each item and rebuilds; the stand-in re-reads and the dials move
+shot(u=>{const Rv=S.review;let g='';const RX=600,RY=230;
+ g+=G(robot(RX,RY,1.2)+T(RX-80,RY+8,'our robot',{size:22,wt:700,fill:C.mut,a:'end'}),'',eo(p(u,0,0.5)));
+ [Rv.fb[0],Rv.fb[1],''].forEach((t,i)=>{const f=eio(p(u,0.3+i*0.35,1.3+i*0.35));if(f<1)g+=sticky(L(160+i*60,RX,f),L(420+i*130,RY,f),t,{w:300,size:22,s:L(.6,.15,f),rot:(i-1)*6*(1-f),op:1-f*.6})});
+ const fixRows=Rv.fixes.map((t,i)=>[String(i+1),t,'']);
+ g+=tapeList(RX-250,RY+90,fixRows,{w:500,rh:54,plain:true,title:'fix list',count:'',unroll:eo(p(u,1.3,2.6)),status:fixRows.map((r,i)=>u>3.4+i*0.35?'met':'')});
+ const ar=p(u,3.4,3.9);g+=`<path d="M${RX+260} ${RY+60} H${RX+390}" stroke="${C.gold}" stroke-width="4" opacity="${ar}"/><path d="M${RX+390} ${RY+50} l16 10 l-16 10z" fill="${C.gold}" opacity="${ar}"/>`;
+ const dk=eo(p(u,3.8,4.6));g+=G(draft(1200,RY+60,0.85,{label:'next draft',fig:eo(p(u,4.2,5.0))}),`translate(${L(40,0,dk)} 0)`,dk);
+ const sk=eo(p(u,5.2,5.9)),up=eo(p(u,6.2,7.4));const now=Rv.before.map((b,i)=>L(b,Rv.after[i],up));
+ g+=G(avatar(1300,500,C.teal,.8)+T(1356,494,S.people[0]+' re-reads',{size:24,wt:700})+T(1356,524,Rv.rr[0]+' → '+Rv.rr[1],{size:20,fill:C.mut})+dial(1420,650,now[0],'understanding',C.teal)+dial(1660,650,now[1],'trust',C.red),'',sk);
+ g+=T(1790,790,Rv.note,{size:18,fill:C.mut,a:'end',op:sk});
+ return G(g,cam(L(1.03,1,eio(p(u,0,9))),CX,CY,L(-30,30,eio(p(u,0,9))),0))+mini(STN,3)+cap(S.cap.vfix,u)});
+// 10 checks passed, picture wrong
+shot(u=>{const W0=S.wrong;if(W0.mode==='flag'){
+ let g=R(260,150,880,640,{r:18,fill:C.ink})+T(300,220,W0.title,{size:W0.titleSize||36,wt:700,fill:C.bg})+(W0.found?T(700,690,W0.found,{size:24,wt:700,fill:'#5a6070',a:'middle',op:p(u,2.3,2.8)}):'')+T(300,262,'the animated clip on it:',{size:24,fill:'#5a6070'});
+ const x0=330,x1=1070,yA=560,dx=d=>x0+(x1-x0)*d/30;
+ g+=`<path d="M${x0} ${yA} H${x1}" stroke="${C.bg}" stroke-width="5"/>`+[0,7,14,21,28].map(d=>`<path d="M${dx(d)} ${yA-12} V${yA+12}" stroke="${C.bg}" stroke-width="3"/>`+T(dx(d),yA+48,'day '+d,{size:22,wt:700,fill:C.bg,a:'middle'})).join('');
+ const fl=(d,col,dash)=>`<path d="M${dx(d)} ${yA} V${yA-170}" stroke="${col}" stroke-width="5" ${dash?'stroke-dasharray="12 8"':''}/><path d="M${dx(d)} ${yA-170} l70 22 l-70 22z" fill="${dash?'none':col}" stroke="${col}" stroke-width="4" ${dash?'stroke-dasharray="8 6"':''}/>`;
+ g+=fl(W0.clipDay,'#c0603a',false);
+ ['words','numbers','links'].forEach((c,i)=>{const k=p(u,0.5+i*0.35,0.8+i*0.35);if(k>0)g+=G(tick(0,0,1,22)+T(44,12,c+' check passed',{size:34,wt:700}),`translate(1240 ${300+i*96})`,k)});
+ const ring=eo(p(u,1.9,2.4)),ok=eo(p(u,2.7,3.2));
+ if(ring>0)g+=`<circle cx="${dx(W0.clipDay)+30}" cy="${yA-150}" r="${L(40,86,ring)}" fill="none" stroke="${C.red}" stroke-width="8" opacity="${ring}"/>`+T(dx(W0.clipDay)+30,yA-252,'clip flags day '+W0.clipDay,{size:28,wt:700,fill:C.red,a:'middle',op:ring});
+ if(ok>0)g+=G(fl(W0.slideDay,C.bg,true)+T(dx(W0.slideDay)-20,yA-196,'slide says day '+W0.slideDay,{size:28,wt:700,fill:C.bg,a:'end'}),'',ok);
+ g+=G(avatar(1420,640,C.teal,1)+T(1420,712,W0.who,{size:22,wt:700,a:'middle',fill:C.mut}),'',p(u,3.0,3.5));
+ return G(g,cam(L(1,1.04,eio(p(u,1.6,2.6))),L(CX,900,eio(p(u,1.6,2.6))),CY))+mini(STN,3)+cap(S.cap.wrong,u,2.2)}
+ let g=R(260,150,880,640,{r:18,fill:C.ink})+T(300,220,W0.title,{size:42,wt:700,fill:C.bg});
+ const mx=Math.max(W0.old,W0.other,W0.now)*1.15,bh=v=>v/mx*460;
+ g+=R(380,740-bh(W0.old),170,bh(W0.old),{r:6,fill:'#c9c2b4'})+R(880,740-bh(W0.other),170,bh(W0.other),{r:6,fill:C.teal});
+ g+=T(465,740-bh(W0.old)-18,String(W0.old),{size:56,wt:700,fill:C.bg,a:'middle'})+T(965,740-bh(W0.other)-18,String(W0.other),{size:56,wt:700,fill:C.bg,a:'middle'});
+ ['words','numbers','links'].forEach((c,i)=>{const k=p(u,0.5+i*0.35,0.8+i*0.35);if(k>0)g+=G(tick(0,0,1,22)+T(44,12,c+' check passed',{size:34,wt:700}),`translate(1240 ${300+i*96})`,k)});
+ const ring=eo(p(u,1.9,2.4)),ok=eo(p(u,2.7,3.2));
+ if(ring>0)g+=`<circle cx="465" cy="${740-bh(W0.old)-36}" r="${L(36,80,ring)}" fill="none" stroke="${C.red}" stroke-width="8" opacity="${ring}"/>`+T(570,740-bh(W0.old)-26,'← old number',{size:34,wt:700,fill:C.red,op:ring});
+ if(ok>0)g+=G(R(380,740-bh(W0.now),170,bh(W0.now),{r:6,fill:'none',stroke:C.bg,sw:4,dash:'14 9'})+T(570,740-bh(W0.now)+50,'← should be '+W0.now,{size:34,wt:700,fill:C.bg}),'',ok);
+ g+=G(avatar(1420,640,C.gold,1)+T(1420,712,W0.who||'a stand-in flagged this slide',{size:22,wt:700,a:'middle',fill:C.mut}),'',p(u,3.0,3.5));
+ if(W0.note)g+=T(1120,778,W0.note,{size:20,fill:'#5a6070',a:'end'});
+ return G(g,cam(L(1,1.04,eio(p(u,1.6,2.6))),L(CX,900,eio(p(u,1.6,2.6))),CY))+mini(STN,3)+cap(S.cap.wrong,u,2.2)});
+// 11 back to brainstorm: unmet rows, must-fix notes and a stand-in's question go into the funnel for the next lap
+shot(u=>{const rows=S.rows.concat([S.newqRow]),TW=S.rowW||640,rh=64;
+ let g=tapeList(100,130,rows,{status:['met','met','not met','not met',''],rowK:i=>i<4?1:eo(p(u,4.2,4.9)),hl:[0,0,0,0,'#9fdde6'],w:TW,rh});
+ g+=avatar(1480,240,C.teal,1)+T(1480,312,S.people[0],{size:22,wt:700,a:'middle',fill:C.mut})+avatar(1680,240,C.gold,1)+T(1680,312,S.people[1],{size:22,wt:700,a:'middle',fill:C.mut});
+ const FX=1340,tk=eo(p(u,0.2,0.8));
+ g+=G(T(FX,422,'next round',{size:28,wt:700,fill:C.gold,a:'middle'})+`<path d="M${FX-200} 450 L${FX+200} 450 L${FX+46} 610 V670 H${FX-46} V610 Z" fill="${C.panel}" stroke="${C.gold}" stroke-width="4" stroke-linejoin="round"/>`+`<path d="M${FX} 690 V740" stroke="${C.gold}" stroke-width="4"/><path d="M${FX-10} 736 l10 16 l10 -16z" fill="${C.gold}"/>`+T(FX,786,'2  Brainstorm',{size:26,wt:700,fill:C.gold,a:'middle'}),'',tk);
+ const land=[[FX-110,520],[FX-40,540],[FX+40,530],[FX+110,515]];
+ [2,3].forEach((r,i)=>{const k=eio(p(u,0.5+i*0.3,1.6+i*0.3));if(k>0)g+=G(R(-48,-14,96,28,{r:14,fill:C.panel,stroke:C.amber,sw:2.5})+R(-30,-4,60,8,{r:4,fill:C.amber}),`translate(${L(100+TW,land[i][0],k)} ${L(130+66+r*rh+22,land[i][1],k)-Math.sin(k*Math.PI)*80})`,cl(k*3))});
+ [0,1].forEach(i=>{const k=eio(p(u,1.2+i*0.3,2.2+i*0.3));if(k>0)g+=sticky(L(1480+i*200,land[2+i][0],k),L(300,land[2+i][1],k)-Math.sin(k*Math.PI)*60,'',{w:200,s:L(.6,.42,k),rot:(i?8:-8),op:cl(k*3)})});
+ const fly=eio(p(u,3.0,4.4));if(u<4.4)g+=G(bubble(0,0,S.newq,p(u,2.4,2.9),{size:28,tail:'right'}),`translate(${L(1240,100+TW*0.5,fly)} ${L(190,130+66+4*rh+30,fly)}) scale(${L(1,.5,fly)})`,1-fly);
+ return G(g,cam(L(1.06,1,eio(p(u,0,6))),CX,CY))+mini(STN,4)+cap(S.cap.back,u)});
+// 12 round after round: the card laps; met climbs
+shot(u=>{let g=track(1260,CY,250,STN,{sr:30,ls:22,lr:70,sw:36,dash:-u*120});
+ const f=eio(p(u,0.3,5.4))*3,[x,y]=onTrack(1260,CY,250,f%1);g+=draft(x,y,0.36,{label:''});
+ const steps=[[0.3,38],[1.9,62],[3.5,65],[5.0,67]];let n=38,last=0;steps.forEach(([a,v])=>{if(u>=a){n=v;last=a}});
+ const flip=p(u,last,last+0.25);g+=G(T(0,0,String(n),{size:260,wt:700}),`translate(170 470) scale(1 ${L(0.2,1,eo(flip))})`);
+ g+=T(180,560,'of 84 asks met',{size:44,wt:700,fill:C.mut})+T(180,630,steps.filter(([a])=>u>=a).map(s=>s[1]).join('  →  '),{size:36,wt:700,fill:C.gold})+T(180,690,'one real run, four strict re-scores',{size:24,fill:C.mut});
+ return G(g,cam(L(1,1.04,eio(p(u,0,6))),CX,CY))+cap(S.cap.rounds,u)});
+// 13 when to stop: two signal lamps (nothing left to close; every main slide 4+, or 4 rounds); both green, the gate opens
+shot(u=>{let g='';const st=p(u,1.6,1.85),sk=eo(p(u,2.2,3.0));
+ g+=lamp(430,220,st>0.5?eo(p(u,1.7,2.0)):0)+T(430,350,'asks we can still close',{size:30,wt:700,fill:C.mut,a:'middle'});
+ for(let i=0;i<4;i++){const k=eo(p(u,0.2+i*0.3,0.7+i*0.3));if(k<1)g+=qcard(L(320+(i%2)*220,1900,k),L(420+Math.floor(i/2)*90,260+i*40,k),k*30,0.8)}
+ if(st>0)g+=G(R(-150,-56,300,112,{r:12,fill:'none',stroke:C.green,sw:8})+T(0,28,'none',{size:80,wt:700,fill:C.green,a:'middle'}),`translate(430 470) rotate(-6) scale(${L(1.8,1,eo(st))})`,cl(st*2));
+ g+=T(790,470,'+',{size:80,wt:700,fill:C.gold,a:'middle',op:p(u,2.0,2.4)});
+ const v=L(0,4.2,sk);g+=G(lamp(1150,220,eo(p(u,3.0,3.3)))+T(1150,350,'stand-ins: every main slide 4+',{size:30,wt:700,fill:C.mut,a:'middle'})+dial(1040,470,v,'understanding',C.teal)+dial(1260,470,v*0.98,'trust',C.red)+T(1150,600,'or after 4 rounds',{size:28,wt:700,fill:C.gold,a:'middle'}),'',eo(p(u,2.0,2.4)));
+ const op=eio(p(u,3.4,4.4));
+ g+=G(R(-12,-260,24,520,{r:8,fill:C.line})+`<rect x="0" y="-230" width="150" height="34" rx="8" fill="${C.gold}" transform="rotate(${-op*80} 0 -213)"/>`,'translate(1530 470)')+G(R(-12,-260,24,520,{r:8,fill:C.line})+`<rect x="-150" y="-230" width="150" height="34" rx="8" fill="${C.gold}" transform="rotate(${op*80} 0 -213)"/>`,'translate(1860 470)');
+ g+=draft(L(1695,2250,eio(p(u,4.2,5.6))),560,0.5,{label:''});
+ const pk=eio(p(u,1.4,2.0)),gl=eio(p(u,3.2,4.2));
+ return G(g,cam(L(L(1,1.1,pk),1.0,gl),L(L(CX,640,pk),1150,gl),CY))+cap(S.cap.stop,u)});
+// 14 two skills, one loop: start at either; the verdict
+shot(u=>{let g=track(760,CY,260,STN,{sr:34,ls:24,lr:76,sw:40,dash:-u*40});
+ const flag=(i,label,col,k)=>{if(k<=0)return '';const [x,y]=stPos(760,CY,260,i,5);const px=i===0?x-110:x-120,py=i===0?y+64:y+40,fw=L(0,96,k);
+  return G(`<path d="M${px} ${py} V${py-130}" stroke="${C.ink}" stroke-width="4" stroke-linecap="round"/><path d="M${px} ${py-130} Q${px+fw*0.5} ${py-118+Math.sin(u*4)*6} ${px+fw} ${py-108} Q${px+fw*0.5} ${py-96+Math.sin(u*4+1)*6} ${px} ${py-86}Z" fill="${col}"/>`+T(px-18,py-132,'start here',{size:20,wt:700,fill:col,a:'end'})+T(px-18,py-96,label,{size:30,wt:700,a:'end'}),'',k)};
+ g+=flag(0,'/dig-till-done',C.gold,eo(p(u,0.6,1.3)))+flag(3,'/client-stand-ins',C.teal,eo(p(u,1.4,2.1)));
+ const f=eio(p(u,0.2,4.0)),[x,y]=onTrack(760,CY,260,f);g+=draft(x,y,0.4,{label:''});
+ g+=bubble(1500,300,S.verdict,p(u,3.6,4.1),{size:30,who:S.verdictWho,col:C.gold});
+ g+=T(1500,640,S.link,{size:34,wt:700,fill:C.gold,a:'middle',op:p(u,4.6,5.2)});
+ return G(g,cam(L(1.08,0.94,eio(p(u,0,7.5))),1060,CY))+cap(S.cap.end,u,0.6)});
+
+renderFrame(0);
+</script></body></html>
