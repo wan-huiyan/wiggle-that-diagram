@@ -11,7 +11,8 @@ Silent, captioned films rendered to MP4 from one SVG page each. Every figure is 
 | `films/bike-share.mp4`: by 9:00, 40 of the 60 station docks are empty | 58 s | `films/bike-share.html` | `films/bike-share.gif` (2.2× speed, from 0:27) |
 | `films/library.mp4`: loans rose most at the branches nearest a closed one | 29 s | `films/library.html` | `films/library.gif` (1.5× speed, from 0:14) |
 
-Both pages load `films/kit.js` and `films/fonts/` (copies of the skill's `scripts/style-d/`). Re-check and re-render
+`final/films.html` plays both on the live site; the Pages build copies the MP4s and the `*-poster.jpg` stills into
+`films/` beside it. Both film pages load `films/kit.js` and `films/fonts/` (copies of the skill's `scripts/style-d/`). Re-check and re-render
 from `films/` (`K` is the skill's `scripts` folder):
 
 ```bash
@@ -40,9 +41,10 @@ Every name and amount is invented.
 | Diagram clip (A) | `final/expenses-diagram.html` | 435 KB | `expenses/style-a/expenses.js`, `eras_expenses.js`, `meta.json` |
 | Live SVG (C) | `final/expenses.html` | 23 KB | `expenses/style-c/expenses.svg`, `expenses.js` (default theme) |
 
-`expenses.gif` (the whiteboard at 2× speed, made with ffmpeg from the B master video) is the README hero, and
-`expenses-live.gif` is step 3 of the live style (`gif.py final/expenses.html --beat 3 --from 1.9 --to 8.1`; it stops
-before the taxi's arrow back to Ana starts, so the held last frame is clean). Build the films like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
+`expenses.gif` is the whiteboard at 2× speed (made with ffmpeg from the B master video), and `expenses-live.gif` is
+step 3 of the live style (`gif.py final/expenses.html --beat 3 --from 1.9 --to 8.1`; it stops before the taxi's arrow
+back to Ana starts, so the held last frame is clean). `gallery/whiteboard.gif` is `expenses.gif` padded to 16:9 with its own background and started at frame 70, so it
+does not open on an empty board. Build the films like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
 
 ## How a pizza order travels
 
