@@ -43,10 +43,8 @@ Every name and amount is invented.
 
 `expenses.gif` is the whiteboard at 2× speed (made with ffmpeg from the B master video), and `expenses-live.gif` is
 step 3 of the live style (`gif.py final/expenses.html --beat 3 --from 1.9 --to 8.1`; it stops before the taxi's arrow
-back to Ana starts, so the held last frame is clean). The README gallery tiles in `gallery/` are made from those two
-plus `gallery/diagram.gif`, the diagram clip at 2× speed (pop-that-readme's `record_gif.py final/expenses-diagram.html
---size 1280x824 --lead 46`, then ffmpeg `setpts=PTS/2`). All three are padded to 16:9 with each film's own background so
-the four tiles match, and the whiteboard tile starts at frame 70 so it does not open on an empty board. Build the films like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
+back to Ana starts, so the held last frame is clean). `gallery/whiteboard.gif` is `expenses.gif` padded to 16:9 with its own background and started at frame 70, so it
+does not open on an empty board. Build the films like the pizza below, with `expenses/beats.json`, `--var EX_BEATS` for A and no `--css` for C.
 
 ## How a pizza order travels
 
