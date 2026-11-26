@@ -12,7 +12,6 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/wan-huiyan/wiggle-that-diagram" alt="license"/></a>
   <a href="https://github.com/wan-huiyan/wiggle-that-diagram/actions/workflows/test.yml"><img src="https://github.com/wan-huiyan/wiggle-that-diagram/actions/workflows/test.yml/badge.svg" alt="tests"/></a>
-  <a href="https://github.com/wan-huiyan/wiggle-that-diagram/commits"><img src="https://img.shields.io/github/last-commit/wan-huiyan/wiggle-that-diagram" alt="last commit"/></a>
   <a href="https://claude.com/claude-code"><img src="https://img.shields.io/badge/Claude_Code-skill-orange" alt="Claude Code skill"/></a>
 </p>
 
