@@ -1,5 +1,30 @@
 # wiggle-that-diagram demos
 
+Two made-up loop examples (below), and two style D films (`films/`).
+
+## Two data films (`films/`)
+
+Silent, captioned films rendered to MP4 from one SVG page each. Every figure is invented.
+
+| Film | Length | Source | Preview |
+|---|---|---|---|
+| `films/bike-share.mp4`: by 9:00, 40 of the 60 station docks are empty | 58 s | `films/bike-share.html` | `films/bike-share.gif` (2.2× speed, from 0:27) |
+| `films/library.mp4`: loans rose most at the branches nearest a closed one | 29 s | `films/library.html` | `films/library.gif` (1.5× speed, from 0:14) |
+
+Both pages load `films/kit.js` and `films/fonts/` (copies of the skill's `scripts/style-d/`). Re-check and re-render
+from `films/` (`K` is the skill's `scripts` folder):
+
+```bash
+K=$(cd ../../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/scripts && pwd)
+node $K/style-d/film_beats.js bike-share.html && python3 $K/common/pace_check.py beats.public.json
+uv run --with playwright --with pillow python $K/style-d/render.py bike-share.html --video bike-share-master.mp4 --variant public
+```
+
+The MP4s here are re-encoded for the web (`ffmpeg -crf 28 -movflags +faststart`). Each film throws at load time if
+its drawn counts do not add up (bikes leaving must equal free office docks; lit spines must equal the figure).
+
+## Loops
+
 Two made-up examples for the [`wiggle-that-diagram`](../plugins/wiggle-that-diagram/skills/wiggle-that-diagram/SKILL.md)
 skill, each in all three styles. Live, with a switcher (whiteboard first): <https://wan-huiyan.github.io/wiggle-that-diagram/>
 

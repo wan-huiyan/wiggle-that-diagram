@@ -1,0 +1,198 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!--
+County library film. EXAMPLE FIGURES, not real data.
+One sentence (one claim): "When Northgate closed, loans rose most at its two nearest branches, and barely at a farther one."
+Numbers that carry it (each quotes the sentence) -- the only three numbers on screen:
+  +18%  "loans rose most at its two nearest branches"  Branch A's loans since June, per 100 before June   shots 3, 4
+  +11%  "loans rose most at its two nearest branches"  Branch B's loans since June, per 100 before June   shot 4
+  +2%   "and barely at a farther one"             Branch C's loans since June, per 100 before June   shot 4
+  June  "When Northgate closed" (a label, not a figure)                                               shots 1-4
+  The legend's "1%" is the unit key of the spines, not a finding.
+What is counted: loans at each branch, before and since June. NOT where any borrower went: no picture shows anyone
+moving between branches, and no caption says borrowers moved.
+"Nearest" is the map's claim (shot 2): A and B sit a short road from Northgate, C a long one.
+Dropped from the brief (true candidates, not this sentence): e-books 410,000 vs print 385,000; picture books 44% of
+print; 7 of 23 branches have 60% of visits; loans before 2021 cannot be matched to borrowers.
+
+Idea | shape (one shape per idea; one shape per kind of quantity)
+  one loan (opening only)        | a blue cloth book with a red ribbon, face-out; it is stamped at Northgate's door, then
+                                 |   lifts away and fades. It never travels a road and is never part of a count.
+  a branch                       | a building with a gable roof (street: big; map: small; its loans: a bookcase under the same roof)
+  a branch closing               | a shutter rolls down over the whole front and is padlocked, a paper sign "closed in June",
+                                 |   the walls greyed (no boards: boarded windows over a door read as a sleeping face)
+  how near a branch is           | the length of the road from Northgate on the map (shot 2)
+  loans, the only quantity       | book spines on shelves, units(): 1 spine = 1% of the branch's loans before June;
+                                 |   grey = before June (100 per branch), gold = the rise since June (exactly 18, 11, 2 lit), each gold
+                                 |   spine dropping onto the fifth shelf one at a time, right-aligned so the figure sits beside it.
+                                 |   Gold is used for nothing else inside the picture. Branch A teal, B terracotta, C lavender,
+                                 |   Northgate tan (greyed once closed). The hero blue is used only for the book.
+  a loan being made              | a date stamp coming down on the book
+  invented figures               | ONE disclaimer: the header pill "example figures, not real data", on every shot
+  the key / what was counted     | one line under the title, at the title margin (shot 3: the spine key; shot 4: what was counted
+                                 |   and the gold key)
+-->
+<style>
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Regular.ttf);font-weight:400}
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Bold.ttf);font-weight:700}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#17130f}
+svg text{font-family:Outfit,sans-serif}
+</style></head><body>
+<svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>window.KIT_THEME={bg:'#17130f',panel:'#211a14',card:'#2b2219',line:'#42362a',ink:'#f7f0e1',mut:'#d2c8b4',gold:'#e6ab4a',teal:'#86c4a8',
+ green:'#8fd19e',amber:'#f0b24a',red:'#e58a6e',cap:'#ebe3d2',paper:'#f1e8d3',dark:'#241c14',sticky:'#f2c76a'};</script>
+<script src="kit.js"></script>
+<script>
+const V=(new URLSearchParams(location.search).get('v'))||'public';
+const STR={public:{
+ header:'When a branch closed', hdrNote:'example figures, not real data',
+ hero:'one loan',
+ north:'Northgate', closed:'closed in June', brA:'Branch A', brB:'Branch B', brC:['Branch C','(farther away)'],
+ fig:'loans +', figA:'loans +18%', figB:'loans +11%', figC:'loans +2%',
+ legend:['1 spine = 1% of loans before June','gold = the rise since June'],
+ source:'Counted: loans at each branch, before and since June.',
+ cap:{
+  open:'In June, the Northgate branch closed.',
+  map:'Two branches are nearest to Northgate.',
+  rowA:'At Branch A, loans climbed after June.',
+  end:'Loans rose most at the branches nearest Northgate.'}
+}};
+const S=STR[V]||STR.public;
+const DURS={public:[7.5,6,8.5,7]};
+const D=DURS[V]||DURS.public;
+setupFilm({durs:D, header:'', capMode:'fade'});
+// camera ease over the shot's own length, so a shortened shot still finishes its push
+const push=(u,i,a,b)=>L(a,b,eio(p(u,0,D[i]-0.2)));
+
+// ---- palette roles: gold = the rise since June, and nothing else ----
+const HB='#7fa8d8', NGC='#c79b6d', BBC=C.red, BCC='#a99bd6', LIGHT='#e6dcc8', SPG='#857260', SHC='#5d5143';
+// the header, drawn on the overlay (the camera never moves it): the film's title and its ONE disclaimer, the
+// disclaimer in a lighter weight and dimmer ink so it reads as secondary to the title
+function hdr(){const x2=110+S.header.length*40*0.51+30,w=S.hdrNote.length*30*0.46+48;
+ OVER+=T(110,100,S.header,{size:40,wt:700,fill:C.ink})+R(x2,62,w,52,{r:26,fill:LIGHT,op:.08})+T(x2+w/2,99,S.hdrNote,{size:30,wt:400,fill:C.mut,a:'middle'})}
+// one key line under the title, at the title margin, on the overlay (never moved by the camera)
+const keyLine=(inner,op=1)=>{OVER+=G(inner,'',op)};
+const goldKey=(x,dy=0)=>R(x,146+dy,12,32,{r:3,fill:C.gold})+T(x+26,172+dy,S.legend[1],{size:30,wt:700,fill:C.gold});
+const spineKey=(dy=0)=>R(110,146+dy,12,32,{r:3,fill:SPG})+T(134,172+dy,S.legend[0],{size:30,wt:700,fill:LIGHT});
+
+// ---- film-local shapes ----
+// the hero: one library book, face-out (cloth cover, ribbon). o.mark 0..1 shows the red date-stamp ring on the cover
+function book(x,y,s=1,o={}){const col=o.col||HB;
+ let g=R(-62,-88,124,176,{r:8,fill:col})+R(-62,-88,16,176,{r:6,fill:C.dark,op:.35})+R(-28,-52,70,12,{r:4,fill:C.dark,op:.8})+R(-28,-28,48,8,{r:4,fill:C.dark,op:.5})+`<path d="M30 -88 V-30 l9 -10 l9 10 V-88Z" fill="${C.red}"/>`;
+ if(o.mark)g+=`<circle cx="8" cy="38" r="30" fill="none" stroke="${C.red}" stroke-width="6" opacity="${o.mark}"/><path d="M-8 38 H24" stroke="${C.red}" stroke-width="6" opacity="${o.mark}"/>`;
+ return G(g,`translate(${x} ${y}) rotate(${o.rot||0}) scale(${s})`,o.op??1)}
+// a date stamp: handle and rubber base; (x,y) is the bottom of the rubber
+const stamp=(x,y,op=1)=>G(R(-50,-34,100,34,{r:6,fill:C.red})+R(-40,-48,80,14,{r:4,fill:'#7a5a3a'})+R(-12,-120,24,74,{r:8,fill:'#7a5a3a'})+`<circle cx="0" cy="-128" r="26" fill="#7a5a3a"/>`,`translate(${x} ${y})`,op);
+// a branch building, drawn with its bottom centre at (0,0); o.shut 0..1 greys it; o.shutter 0..1 rolls a shutter down over
+// the whole front (windows and door); o.lock 0..1 hangs a padlock on its bottom rail
+function building(w,h,col,o={}){const sh=o.shut||0,sc=sh>0.5?C.mut:col;
+ let g=R(-w/2,-h,w,h,{r:6,fill:C.card,stroke:sc,sw:5})+`<path d="M${-w/2-14} ${-h} L0 ${-h-w*0.32} L${w/2+14} ${-h}Z" fill="${sc}" opacity="${L(.9,.55,sh)}"/>`
+  +R(-24,-76,48,76,{r:6,fill:C.bg})+R(-w/2+22,-h+28,34,34,{r:5,fill:C.bg})+R(w/2-56,-h+28,34,34,{r:5,fill:C.bg});
+ const k=o.shutter||0;
+ if(k>0){const x0=-w/2+10,ww=w-20,top=-h+16,hh=(-top)*k;
+  g+=R(x0,top,ww,hh,{r:3,fill:SHC});
+  for(let y=top+13;y<top+hh-3;y+=13)g+=`<path d="M${x0+4} ${y} H${x0+ww-4}" stroke="#2f2720" stroke-width="3"/>`;
+  g+=R(x0-6,top-10,ww+12,18,{r:5,fill:'#3d342b'})+R(x0,top+hh-8,ww,8,{r:3,fill:'#3d342b'});
+  const lk=o.lock||0;
+  if(lk>0)g+=G(`<path d="M-12 -30 v-10 a12 12 0 0 1 24 0 v10" fill="none" stroke="${C.mut}" stroke-width="6"/>`+R(-18,-32,36,28,{r:5,fill:C.mut})+`<circle cx="0" cy="-20" r="4" fill="${C.dark}"/>`,`translate(0 ${-(1-lk)*16})`,lk)}
+ return g}
+const placeB=(x,y,s,inner,op=1)=>G(inner,`translate(${x} ${y}) scale(${s})`,op);
+// the paper "closed in June" sign, centred on (x,y)
+const sign=(x,y,op=1,size=30)=>{const w=S.closed.length*size*0.52+40,h=size+22;return G(R(-w/2,-h/2,w,h,{r:8,fill:C.paper})+T(0,size*0.36,S.closed,{size,wt:700,fill:C.dark,a:'middle'}),`translate(${x} ${y})`,op)};
+// shot 1 street furniture: a neighbour house (dim, lit windows) and a lamp post
+function house(x,base,w,h){return R(x-w/2,base-h,w,h,{r:4,fill:C.panel,stroke:C.line,sw:3})+`<path d="M${x-w/2-10} ${base-h} L${x} ${base-h-w*0.36} L${x+w/2+10} ${base-h}Z" fill="${C.line}"/>`
+ +[0,1].map(i=>R(x-w/2+26+i*(w-86),base-h+30,34,40,{r:4,fill:C.sticky,op:.32})).join('')+R(x-20,base-70,40,70,{r:4,fill:C.bg})}
+const lampPost=(x,base)=>`<path d="M${x} ${base} V${base-250}" stroke="${C.line}" stroke-width="10" stroke-linecap="round"/><circle cx="${x}" cy="${base-262}" r="44" fill="${C.sticky}" opacity=".08"/><circle cx="${x}" cy="${base-262}" r="16" fill="${C.sticky}" opacity=".7"/>`;
+
+// ---- the map (shot 2): Northgate, two near branches, one farther branch; road length = how near ----
+const NG=[330,600],BA=[860,380],BB=[860,800],BC=[1560,560];
+const roadA=[[440,560],[600,560],[620,330],[750,320]],roadB=[[440,610],[600,610],[620,760],[750,760]],roadC=[[440,585],[820,585],[1100,500],[1450,500]];
+// k 0..1 draws the road out from Northgate; the dashed centre line follows it
+const road=(r,k=1)=>{if(k<=0)return '';const d=`M${r[0][0]} ${r[0][1]} C${r[1][0]} ${r[1][1]} ${r[2][0]} ${r[2][1]} ${r[3][0]} ${r[3][1]}`;
+ return `<path d="${d}" pathLength="1" fill="none" stroke="${C.line}" stroke-width="44" stroke-linecap="round" stroke-dasharray="${k} 2"/><path d="${d}" fill="none" stroke="${C.mut}" stroke-width="3" stroke-dasharray="14 18" opacity="${.5*p(k,.85,1)}"/>`};
+
+// ---- the loans bookcase: a branch roof over shelves; 1 spine = 1% of its loans before June ----
+// 25 to a shelf: four shelves of grey (the 100 before June), the gold rise on the fifth (bottom) shelf on its own,
+// filled from the RIGHT end so the figure beside or under the case sits next to the gold.
+// Drawn in local units with its inner left edge at x=0 and its base at y=0; the name is drawn by the caller.
+const COLS=25,DX=28,DY=74,CW=COLS*DX,CASE_TOP=-488,CASE_CX=CW/2-3;
+// land(j) 0..1: how far gold spine j has dropped onto the shelf (1 = landed). units() places spine i at slot i%25;
+// a gold spine is shifted inside its glyph so spine j sits in slot 24-j.
+function spineGlyph(i,on,land){const h=52+Math.floor(rnd(i*3+5)*15);
+ if(i<100)return R(0,-h,22,h,{r:3,fill:SPG});
+ const j=i-100,k=land(j);if(!on||k<=0)return '';
+ const dy=-(1-eo(k))*110;
+ return G(R(0,-h,22,h,{r:3,fill:C.gold})+R(5,-h+10,12,4,{r:2,fill:C.dark,op:.5}),`translate(${(COLS-1-2*j)*DX} ${dy})`,cl(k*2.5))}
+function bookcase(id,col,n,land){const top=-398,b0=-314;
+ let g=`<path d="M-40 ${top} L${CASE_CX} ${top-90} L${CW+34} ${top}Z" fill="${col}" opacity=".42"/>`
+  +R(-16,top,CW+26,-top,{r:6,fill:C.panel})+R(-16,top,CW+26,-top,{r:6,fill:'none',stroke:col,sw:4,op:.55});
+ for(let r=0;r<5;r++)g+=R(-10,b0+r*DY,CW+14,10,{r:3,fill:C.line});
+ g+=`<g class="case-${id}">`+G(units(100+n,100+n,(i,on)=>spineGlyph(i,on,land),{cols:COLS,dx:DX,dy:DY}),`translate(0 ${b0})`)+`</g>`;
+ return g}
+const GOLD_ROW_Y=-314+4*DY;   // the fifth shelf's plank, in bookcase units
+// spines landing one at a time: spine j starts dropping at t0+j*gap and lands `fall` seconds later
+const lander=(u,t0,gap,fall=.25)=>j=>p(u,t0+j*gap,t0+j*gap+fall);
+const landed=(u,n,t0,gap,fall=.25)=>{let c=0;for(let j=0;j<n;j++)if(u>=t0+j*gap+fall)c++;return c};
+
+// 1 Northgate: one loan is stamped at its door; a shutter rolls down over the front, is padlocked, the loan lifts away
+//   and the "closed in June" sign goes up. The caption arrives as the shutter lands.
+const BK_Y=572,LB_X=1200;   // the book's centre (its bottom clears the ground line at 700 by ~58), the label's left edge
+shot(u=>{hdr();let g=R(60,730,1800,120,{r:0,fill:'#211a13'})+`<path d="M60 790 H1860" stroke="${C.mut}" stroke-width="4" stroke-dasharray="40 36" opacity=".25"/>`+R(60,700,1800,30,{r:0,fill:C.line});
+ g+=house(330,700,300,230)+house(1590,700,300,250)+lampPost(535,700)+lampPost(1385,700);
+ const sh=eo(p(u,0.9,1.5)),shut=eio(p(u,0.7,1.45)),lk=eo(p(u,1.45,1.7)),sg=eo(p(u,1.9,2.3));
+ g+=placeB(CX,700,1.8,building(240,170,NGC,{shut:sh,shutter:shut,lock:lk}));
+ g+=T(CX,384,S.north,{size:36,wt:700,fill:C.dark,a:'middle'});            // the name, in the gable, clear of the road
+ g+=sign(CX,540,sg,30);
+ // the loan: stamped (0.08-0.38), the stamp gone by 0.56, labelled, held while the shutter comes down behind it, then lifts away and fades (1.5-2.0)
+ const sk=p(u,0.08,0.38),up=p(u,0.4,0.56),lift=eio(p(u,1.5,2.0));
+ g+=book(CX,BK_Y-lift*120,0.8,{mark:sk>=1?1:0,op:1-lift});
+ if(up<1)g+=stamp(CX+6,L(420,BK_Y+50,eio(sk))-L(0,230,eio(up)),1-up);
+ const lo=p(u,0.3,0.6)*(1-lift);
+ // the label sits fully outside the building (between its right wall and the lamp post), with a short leader to the book
+ g+=G(`<path d="M${CX+56} ${BK_Y} H${LB_X-4}" stroke="${HB}" stroke-width="4" stroke-linecap="round"/><circle cx="${CX+56}" cy="${BK_Y}" r="7" fill="${HB}"/>`+R(LB_X,BK_Y-29,160,58,{r:12,fill:C.bg,op:.85})+T(LB_X+80,BK_Y+12,S.hero,{size:40,wt:700,fill:HB,a:'middle'}),`translate(0 ${-lift*120})`,lo);
+ return G(g,cam(push(u,0,1,1.05),CX,520))+cap(S.cap.open,u,0.95)});
+
+// 2 the map: Northgate (closed) and the roads out of it; A and B a short road away, C a long one. C's building is
+//   there before its road reaches it, so no road runs to nothing.
+shot(u=>{hdr();const kA=eio(p(u,0,0.6)),kC=eio(p(u,0.7,1.8)),pa=eo(p(u,0.15,0.55)),pc=eo(p(u,0.45,0.85));
+ let g=road(roadA,kA)+road(roadB,kA)+road(roadC,kC);
+ g+=placeB(NG[0],NG[1],.9,building(240,170,NGC,{shut:1,shutter:1,lock:1}))+T(NG[0],NG[1]+52,S.north,{size:40,wt:700,a:'middle'})+sign(NG[0],NG[1]-262,1,30);
+ g+=placeB(BA[0],BA[1],.8,building(240,170,C.teal),pa)+T(BA[0]+120,BA[1]-56,S.brA,{size:40,wt:700,op:pa});
+ g+=placeB(BB[0],BB[1],.8,building(240,170,BBC),pa)+T(BB[0]+120,BB[1]-56,S.brB,{size:40,wt:700,op:pa});
+ g+=placeB(BC[0],BC[1],.8,building(240,170,BCC),pc)+T(BC[0],BC[1]+52,S.brC[0],{size:40,wt:700,a:'middle',op:pc})+T(BC[0],BC[1]+94,S.brC[1],{size:32,wt:700,fill:LIGHT,a:'middle',op:pc});
+ return G(g,cam(push(u,1,1,1.04),930,500))+cap(S.cap.map,u,0.8)});
+
+// 3 Branch A, close up: the 100 grey spines are there from the first frame; the 18 gold ones drop onto the bottom shelf
+//   one at a time, and the figure beside them counts up in step (+1% per spine), landing at +18% with the 18th.
+//   Only then does the caption say it in words.
+const A_T0=0.35,A_GAP=0.14;
+// X0 centres the pair (roof's left eave to the right end of the final "loans +18%") on world x 960, the camera's focus
+const A_FIGW=596,A_X0=Math.round(960-(CW+12+A_FIGW)/2);
+shot(u=>{hdr();const land=lander(u,A_T0,A_GAP,.1),n=landed(u,18,A_T0,A_GAP,.1);   // the figure counts a spine only once it has landed: never ahead of the shelf
+ const X0=A_X0,BASE=735;
+ let g=G(bookcase('A',C.teal,18,land),`translate(${X0} ${BASE})`);
+ g+=T(X0+CASE_CX,BASE-398-18,S.brA,{size:40,wt:700,fill:C.ink,a:'middle'});
+ // the figure, beside the gold row (its baseline on the bottom shelf's plank)
+ const fk=eo(p(u,A_T0+0.1,A_T0+0.22)),pop=n===18?bk(p(u,A_T0+17*A_GAP+0.1,A_T0+17*A_GAP+0.45)):1;
+ if(n>0)g+=G(T(0,0,S.fig+n+'%',{size:124,wt:700,fill:C.ink}),`translate(${X0+CW+52} ${BASE+GOLD_ROW_Y-4}) scale(${0.9+0.1*pop})`,fk);
+ keyLine(spineKey()+goldKey(690));
+ return G(g,cam(L(1.06,1.1,eio(p(u,0,D[2]-0.2))),960,480))+cap(S.cap.rowA,u,A_T0+17*A_GAP+0.3)});
+
+// 4 end: the closed branch and all three bookcases, same shelves, same scale. A is as we left it; B's 11 then C's 2 drop
+//   on; the caption arrives once every gold spine is down; then each figure lands under its own case, one at a time.
+const ESC=0.59,EBASE=640,COLX={N:252,A:631,B:1103,C:1575},FIG_DY=118,FIG_SZ=80;
+function endCase(id,col,n,land,name,fig,figK){const cx=COLX[id];
+ return G(bookcase(id,col,n,land),`translate(${cx-CASE_CX*ESC} ${EBASE}) scale(${ESC})`)
+  +[].concat(name).map((l,i)=>T(cx,EBASE+CASE_TOP*ESC-(Array.isArray(name)?64:26)+i*38,l,{size:i?30:36,wt:700,fill:i?LIGHT:C.ink,a:'middle'})).join('')
+  +T(cx,EBASE+FIG_DY-(1-figK)*40,fig,{size:FIG_SZ,wt:700,fill:C.ink,a:'middle',op:figK})}
+shot(u=>{hdr();const fa=eo(p(u,1.9,2.3)),fb=eo(p(u,2.5,2.9)),fc=eo(p(u,3.1,3.5));
+ let g=placeB(COLX.N,EBASE,.7,building(240,170,NGC,{shut:1,shutter:1,lock:1}))+T(COLX.N,EBASE+CASE_TOP*ESC-26,S.north,{size:36,wt:700,fill:C.ink,a:'middle'})
+  +sign(COLX.N,EBASE+(CASE_TOP*ESC-26+(-170-240*0.32)*.7)/2+4,1,28);   // the sign hangs between the name and the roof, on Northgate's picture
+ g+=endCase('A',C.teal,18,()=>1,S.brA,S.figA,fa);
+ g+=endCase('B',BBC,11,lander(u,0.1,0.065,.2),S.brB,S.figB,fb);
+ g+=endCase('C',BCC,2,lander(u,0.85,0.12,.2),S.brC,S.figC,fc);
+ keyLine(spineKey()+goldKey(690)+T(110,222,S.source,{size:30,wt:700,fill:LIGHT}));   // the spine key where shot 3 left it; what was counted under it
+ return G(g,cam(1,960,L(482,470,eio(p(u,0,D[3]-0.2)))))+cap(S.cap.end,u,0.95)});
+
+renderFrame(0);
+</script></body></html>

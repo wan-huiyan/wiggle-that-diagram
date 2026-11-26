@@ -1,0 +1,239 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Regular.ttf);font-weight:400}
+@font-face{font-family:Outfit;src:url(fonts/Outfit-Bold.ttf);font-weight:700}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0c1a21}
+svg text{font-family:Outfit,sans-serif}
+</style></head><body>
+<svg id="v" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+<script>window.KIT_THEME={bg:'#0c1a21',panel:'#13303a',card:'#183540',line:'#2c4b57',ink:'#f4f1e8',mut:'#c3d1d7',gold:'#ff9a3c',teal:'#4cc3e8',green:'#6fdc9a',amber:'#ffd166',red:'#ff7a6b',cap:'#e8eef1'};</script>
+<script src="kit.js"></script>
+<script>
+// A bike-share film (style D), one weekday morning in a made-up city. EVERY FIGURE IS AN EXAMPLE, not real data;
+// the disclaimer is the line under the header (every shot).
+//
+// The one sentence (one claim):  "By 9:00 on a weekday, 40 of the 60 docks by the train stations are empty."
+// The numbers that carry it: 9:00 (the clock), 60 (docks drawn), 40 (docks drawn hollow amber). No other figure on screen.
+// The arithmetic the pictures must obey (asserted below, and counted on rendered frames):
+//   station docks: 3 racks x 20 = 60 drawn, all full at 7:00; exactly 40 bikes leave them: 20 (all of station 1) + 12 + 8.
+//   office docks:  2 blocks x 30 = 60 drawn; at 7:00, 10 + 10 hold a bike and 20 + 20 = 40 are free.
+//   every one of the 40 bikes rides to a free office dock, so the office docks are full at 9:00 because exactly 40 arrived.
+//
+// idea | shape (one shape per idea, one shape per kind of quantity)
+//   a dock with a bike in it              | a slot with a cream dot (a bike seen from above)
+//   an empty dock by a station (THE count)| the same slot, hollow with an amber edge; only station docks ever take this shape
+//   an empty dock by the offices          | the same slot, hollow and dim grey (never amber, never counted on screen)
+//   the docks by a train station          | one rack of 20 slots (2 rows of 10) under a numbered station on the rail
+//   the offices (where commuters go)      | flat-roofed office blocks with window rows, across the river
+//   time of day (the only duration)       | the clock, top right, in one place for the whole film; "time speeds up" beside it while it runs fast
+//   riders arriving                       | a train sliding along the rail, small people stepping off
+//   a bike being ridden                   | a small cream bike with a rider, on the streets
+//   the hero                              | the orange bike: taken by a rider (shot 2), ridden over the bridge and docked
+//                                         |   (shot 3); once docked it turns into an ordinary cream dot
+// ONE table says when each station dock empties (DEPAT) and when each office dock fills (FILL); slots, glows and the count read it.
+const V=(new URLSearchParams(location.search).get('v'))||'public';
+const STR={public:{
+ header:'A bike-share scheme in a made-up city', tag:'example figures, not real data', wk:'weekday', fast:'time speeds up',
+ cap:{open:'7:00 on a weekday: every station dock is full.', take:'A train pulls in. A rider takes the orange bike.',
+  ride:'The orange bike rides to the offices.', rush:'All morning, bikes leave. The office docks fill up.',
+  count:'By 9:00, station 1 has no bikes left.', rider:'At 9:00, a rider finds no bike.',
+  end:'Bikes ride one way: offices fill, stations empty.'},
+ lab:{docks:'60 docks by the 3 train stations', legend:'1 dot = 1 dock · white = a bike in it',
+  orange:'the orange bike', office:'office docks', full:'full', count:'40 of 60 docks empty'}
+}};
+const S=STR[V]||STR.public;
+const DURS={public:[12.8, 7.3, 6.8, 8.8, 8.5, 7.3, 7.0]};
+const DD=DURS[V]||DURS.public;
+setupFilm({durs:DD, header:'', capMode:'fade'});
+// the header is drawn here, not by the kit, so the title and the example-data line can be read in a room (>= 28 px)
+function hdr(){OVER+=T(110,72,S.header,{size:44,wt:700,fill:C.gold})+T(110,116,S.tag,{size:30,wt:700,fill:C.cap})}
+
+// ---------- the world ----------
+const LEG_W=474;   // the legend box, sized to its text as measured in the browser (398 px at size 27)
+// a station dock (big: the docks the film counts) and an office dock (smaller, across the river); same shape
+const SD={w:38,h:36,dot:10,dx:46,dy:46}, OD={w:30,h:28,dot:8.5,dx:36,dy:34};
+const Y0=318, COLS=10, RAIL=165, NLANE=292;    // the rack's top row; bikes ride the street at NLANE, between the rail and the racks
+const BL=[{x:194,n:20,fin:20},{x:734,n:20,fin:12},{x:1274,n:20,fin:8}];   // fin = how many of the rack's bikes leave by 9:00
+if(BL.reduce((s,b)=>s+b.n,0)!==60||BL.reduce((s,b)=>s+b.fin,0)!==40||BL[0].fin!==BL[0].n)throw new Error('dock counts');
+const RACK_W=COLS*SD.dx-(SD.dx-SD.w), RACK_B=Y0+SD.dy+SD.h;
+const stX=b=>b.x+RACK_W/2;
+const slotXY=(b,i)=>[b.x+(i%COLS)*SD.dx+SD.w/2,Y0+Math.floor(i/COLS)*SD.dy+SD.h/2];
+// the office docks: two blocks of 10 x 3 across the river; full0 = the 10 + 10 that already hold a bike at 7:00
+const SUB=[{x:150,y:698,full0:[0,5,9,11,14,17,20,24,26,29]},{x:1400,y:698,full0:[2,6,8,10,13,19,21,23,25,28]}];
+const subXY=(s,i)=>[SUB[s].x+(i%10)*OD.dx+OD.w/2,SUB[s].y+Math.floor(i/10)*OD.dy+OD.h/2];
+const FREE0=SUB.map(b=>[...Array(30).keys()].filter(i=>!b.full0.includes(i)));
+if(FREE0[0].length+FREE0[1].length!==40)throw new Error('office docks must start with exactly 40 free');
+const STREET_N=290,STREET_S=672,BRIDGE=[690,1230],GAPX=[140,690,1230,1780];   // bikes ride the platform street, a bridge street, the office street
+// trips: one per bike that leaves; trip 0 is the hero (leaves 7:08, docks 7:25). The other 39 leave 7:26-8:41 and ride 14 min, so the last arrives 8:55.
+// Station 1's riders cross the west bridge to the west office block (20 free); stations 2 and 3 cross the east bridge to the east block (12 + 8 = 20 free).
+const HERO_I=7, HERO_SLOT=3, RIDE=14;
+const ORD=BL.map((b,k)=>[...Array(b.n).keys()].sort((x,y)=>rnd(k*31+x*7.3)-rnd(k*31+y*7.3)).slice(0,b.fin));
+const TRIPS=[{k:0,i:HERO_I,dep:8,arr:25,sub:0,slot:HERO_SLOT,hero:true}];
+const rest=[];BL.forEach((b,k)=>ORD[k].filter(i=>!(k===0&&i===HERO_I)).forEach((i,j,a)=>rest.push({k,i,key:(j+1)/a.length+k*1e-3})));
+rest.sort((a,b)=>a.key-b.key);
+rest.forEach((t,n)=>{t.dep=26+n*(101-26)/(rest.length-1);t.arr=t.dep+RIDE;t.sub=t.k===0?0:1;TRIPS.push(t)});
+const QUEUE=FREE0.map((f,s)=>f.filter(i=>!(s===0&&i===HERO_SLOT)).sort((x,y)=>rnd(s*17+x*3.1)-rnd(s*17+y*3.1)));
+TRIPS.slice(1).sort((a,b)=>a.arr-b.arr).forEach(t=>t.slot=QUEUE[t.sub].shift());
+const DEPAT=BL.map(()=>({})),FILL=[{},{}];TRIPS.forEach(t=>{DEPAT[t.k][t.i]=t.dep;FILL[t.sub][t.slot]=t.arr});
+// the self-check: departures from the stations must equal the free office docks, one bike per dock, all before 9:00
+if(TRIPS.length!==FREE0[0].length+FREE0[1].length||TRIPS.length!==40||QUEUE.some(q=>q.length)||TRIPS.some(t=>t.slot==null||t.arr>120)
+ ||FREE0.some((f,s)=>f.some(i=>FILL[s][i]==null))||!ORD[0].includes(HERO_I)
+ ||TRIPS.filter(t=>t.sub===0).length!==FREE0[0].length||BL.some((b,k)=>Object.keys(DEPAT[k]).length!==b.fin))throw new Error('trip arithmetic');
+const isEmpty=(k,i,m)=>DEPAT[k][i]!=null&&m>=DEPAT[k][i];
+const emptyK=(k,m)=>Object.values(DEPAT[k]).filter(d=>m>=d).length, totEmpty=m=>BL.reduce((s,b,k)=>s+emptyK(k,m),0);
+if(totEmpty(120)!==40||emptyK(0,120)!==20)throw new Error('9:00 arithmetic');
+const subIsFull=(s,i,m)=>SUB[s].full0.includes(i)||m>=FILL[s][i];
+const subAllFull=(s,m)=>FREE0[s].every(i=>m>=FILL[s][i]);
+const clockStr=m=>{m=Math.round(m);return (7+Math.floor(m/60))+':'+String(m%60).padStart(2,'0')};
+// the clock; fast > 0 shows "time speeds up" and two arrowheads beside it (the film runs about ten minutes a second there)
+function clock(m,fast=0){hdr();OVER+=T(1690,102,S.wk,{size:30,wt:700,fill:C.mut,a:'end'})+T(1812,104,clockStr(m),{size:48,wt:700,fill:C.gold,a:'end'});
+ if(fast>0)OVER+=G(T(1496,102,S.fast,{size:30,wt:700,fill:C.amber,a:'end'})+[0,1].map(j=>`<path d="M${1506+j*22} 77 L${1530+j*22} 91 L${1506+j*22} 105 Z" fill="${C.amber}"/>`).join(''),'',fast)}
+// slot shapes: full (cream dot), hero (orange dot), station-empty (amber hollow = the counting shape), office-empty (dim grey)
+function slot(x,y,kind,o={}){const z=o.z||SD;x-=z.w/2;y-=z.h/2;
+ if(kind==='se')return R(x,y,z.w,z.h,{r:6,fill:C.bg,stroke:C.amber,sw:3.5,op:o.eop??1});
+ if(kind==='ue')return R(x,y,z.w,z.h,{r:6,fill:C.bg,stroke:C.line,sw:2,op:.75});
+ const op=o.fop??1;return R(x,y,z.w,z.h,{r:6,fill:C.panel,stroke:C.line,sw:1.5,op})+`<circle cx="${x+z.w/2}" cy="${y+z.h/2}" r="${kind==='h'?z.dot+1.5:z.dot}" fill="${kind==='h'?C.gold:C.ink}" opacity="${op}"/>`}
+function stationDocks(m,o={}){let g='';BL.forEach((b,k)=>{for(let i=0;i<b.n;i++){const [x,y]=slotXY(b,i);
+ g+=slot(x,y,isEmpty(k,i,m)?'se':(o.hero&&k===0&&i===HERO_I?'h':'f'),o)}});return g}
+function officeDocks(m,o={}){let g='';SUB.forEach((b,s)=>{for(let i=0;i<30;i++){const [x,y]=subXY(s,i);
+ g+=slot(x,y,subIsFull(s,i,m)?'f':'ue',Object.assign({z:OD},o))}});return g}
+const RIVER='M40 600 C 520 520, 1250 690, 1880 585';
+const OFFICES=[{x:772,w:100,h:100},{x:890,w:122,h:128},{x:1030,w:88,h:86},{x:1136,w:112,h:114},{x:1266,w:104,h:96}],OFF_BASE=818;
+function offices(so){let g='';OFFICES.forEach((b,j)=>{const top=OFF_BASE-b.h;
+ g+=R(b.x,top,b.w,b.h+20,{r:4,fill:C.card,stroke:C.line,sw:2,op:.95*so})+R(b.x+8,top-8,b.w-16,10,{r:2,fill:C.line,op:.9*so});
+ for(let r=0;r*20+16<b.h;r++)for(let c=0;c*18+14<b.w-8;c++){const lit=rnd(j*91+r*13+c*7)>.62;
+  g+=`<rect x="${b.x+10+c*18}" y="${top+14+r*20}" width="10" height="7" rx="1.5" fill="${C.teal}" opacity="${(lit?.55:.18)*so}"/>`}});return g}
+function city(o={}){const so=o.st??1;let g='';
+ for(let i=0;i<16;i++)g+=`<path d="M${92+i*115} 120 V820" stroke="${C.line}" stroke-width="1.5" opacity="${.35*so}"/>`;
+ [STREET_N,525,STREET_S].forEach(y=>g+=`<path d="M20 ${y} H1900" stroke="${C.line}" stroke-width="5" opacity="${.55*so}"/>`);
+ BL.forEach(b=>g+=`<path d="M${b.x-14} ${RACK_B+16} H${b.x+RACK_W+14}" stroke="${C.line}" stroke-width="4" opacity="${.6*so}"/>`);
+ GAPX.forEach(x=>g+=`<path d="M${x} ${STREET_N} V${STREET_S}" stroke="${C.line}" stroke-width="5" opacity="${.45*so}"/>`);
+ g+=`<path d="${RIVER}" fill="none" stroke="${C.teal}" stroke-width="64" stroke-linecap="round" opacity=".26"/>`;
+ BRIDGE.forEach(x=>g+=R(x-22,528,44,142,{r:6,fill:C.card,stroke:C.line,sw:2,op:.95*so}));
+ g+=offices(so);
+ g+=`<path d="M20 ${RAIL} H1900" stroke="${C.mut}" stroke-width="7" opacity="${.5*so}"/><path d="M20 ${RAIL} H1900" stroke="${C.bg}" stroke-width="2.5" stroke-dasharray="5 20" opacity="${so}"/>`;
+ return g}
+// the three stations: a numbered stop on the rail; the gold glow is how many bikes its rack still holds
+function stations(m,o={}){let g='';BL.forEach((b,k)=>{if(o.only&&!o.only.includes(k))return;const x=stX(b),f=1-emptyK(k,m)/b.n,pu=.85+.15*Math.sin((o.u||0)*2.2+k);
+ g+=R(x-120,RAIL-8,240,16,{r:8,fill:C.teal,op:.35});
+ if(f>0)g+=`<circle cx="${x}" cy="${RAIL}" r="${42+30*f*pu}" fill="${C.gold}" opacity="${.22*f}"/>`;
+ g+=`<circle cx="${x}" cy="${RAIL}" r="40" fill="${C.panel}" stroke="${C.gold}" stroke-width="5"/>`+T(x,RAIL+13,String(k+1),{size:38,wt:700,a:'middle'})});return g}
+function train(x,y){let g='';for(let c=0;c<3;c++){const cx=x-200+c*134;g+=R(cx,y-24,124,48,{r:c===2?20:9,fill:C.teal})+[0,1,2,3].map(w=>R(cx+12+w*27,y-12,18,16,{r:3,fill:C.bg,op:.75})).join('')}return g}
+function person(x,y,col=C.ink,op=1,s=1){return G(`<circle cx="0" cy="-17" r="8" fill="${col}"/><path d="M-10 6 Q0 -16 10 6 Z" fill="${col}"/>`,`translate(${x} ${y}) scale(${s})`,op)}
+// a bike, side view, with its rider; (x, y) is the wheel axle line. o.dash draws an outline (a bike someone is looking for)
+function bike(x,y,s=1,o={}){const col=o.col||C.gold,rc=o.rc||C.ink,sp=o.spin||0,da=o.dash?'stroke-dasharray="9 7"':'';
+ const w=cx=>`<circle cx="${cx}" cy="0" r="26" fill="${o.dash?'none':C.bg}" fill-opacity=".75" stroke="${col}" stroke-width="6" ${da}/>`+(o.dash?'':[0,1,2].map(i=>{const a=sp+i*Math.PI/3;return `<path d="M${cx+Math.cos(a)*26} ${Math.sin(a)*26} L${cx-Math.cos(a)*26} ${-Math.sin(a)*26}" stroke="${col}" stroke-width="2" opacity=".7"/>`}).join(''));
+ let g=w(-44)+w(44)+`<path d="M-44 0 L-10 -38 L24 -38 L8 0 Z M24 -38 L44 0 M-10 -38 L-16 -52 M-28 -52 H-6 M18 -38 L14 -58 L34 -58" stroke="${col}" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round" ${da}/>`;
+ if(o.rider)g+=`<path d="M-16 -54 L-4 -96" stroke="${rc}" stroke-width="11" stroke-linecap="round"/><path d="M-6 -88 L30 -60" stroke="${rc}" stroke-width="7" stroke-linecap="round"/><path d="M-14 -52 L6 -26 L4 -4" stroke="${rc}" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="0" cy="-114" r="13" fill="${rc}"/>`;
+ return G(g,`translate(${x} ${y}) scale(${o.flip?-s:s} ${s})`,o.op??1)}
+// position along a polyline; also returns the segment's direction, taking a vertical segment's facing from the next one
+function along(pts,f){const seg=[];let tot=0;for(let i=1;i<pts.length;i++){const l=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);seg.push(l);tot+=l}
+ const face=i=>{for(let j=i;j<pts.length-1;j++){const d=pts[j+1][0]-pts[j][0];if(d)return d}for(let j=i;j>0;j--){const d=pts[j][0]-pts[j-1][0];if(d)return d}return 1};
+ let d=cl(f)*tot;for(let i=0;i<seg.length;i++){if(d<=seg[i]||i===seg.length-1){const k=seg[i]?cl(d/seg[i]):0,a=pts[i],b=pts[i+1];return [L(a[0],b[0],k),L(a[1],b[1],k),face(i)]}d-=seg[i]}}
+// a trip: a small cream bike with its rider on the streets (never over a dock grid); it stops on the office street above its dock,
+// and the dock below turns cream. No rings: the dock changing is the event.
+const tripRoute=t=>{const [sx]=slotXY(BL[t.k],t.i),[dx]=subXY(t.sub,t.slot),gx=BRIDGE[t.sub];return [[sx,NLANE],[gx,NLANE],[gx,STREET_S-8],[dx,STREET_S-8]]};
+function trips(m){let g='';TRIPS.forEach(t=>{if(t.hero)return;
+ const q=(m-t.dep)/RIDE;if(q<=0||q>=1)return;const [x,y,fd]=along(tripRoute(t),eio(q));
+ g+=bike(x,y,.42,{col:C.ink,rc:C.mut,rider:true,spin:q*30,flip:fd<0,op:cl(q*8)})});return g}
+// the count, ON the docks: a bracket over each rack, joined into one, with the one label above it
+function countMark(k,o={}){if(k<=0)return '';const y=302;let g='';const ends=BL.map(b=>[b.x-4,b.x+RACK_W+4]);
+ const w=eio(cl(k));const x0=ends[0][0],x1=L(x0,ends[2][1],w);
+ g+=`<path d="M${x0} ${y} H${x1}" stroke="${C.amber}" stroke-width="3" opacity=".55"/>`;
+ ends.forEach(([a,b])=>{if(x1>a)g+=`<path d="M${a} ${y+12} V${y} H${Math.min(b,x1)}${x1>=b?` V${y+12}`:''}" stroke="${C.amber}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`});
+ if(!o.nolab)g+=G(T(stX(BL[1]),284,S.lab.count,{size:36,wt:700,fill:C.amber,a:'middle',}),'',o.lab??1);return g}
+const glows=(op)=>{let g='';if(op>0)BL.forEach((b,k)=>Object.keys(DEPAT[k]).forEach(i=>{const [x,y]=slotXY(b,+i);g+=R(x-SD.w/2-5,y-SD.h/2-5,SD.w+10,SD.h+10,{r:8,fill:'none',stroke:C.amber,sw:2,op})}));return g};
+const [HX,HY]=slotXY(BL[0],HERO_I),[OX,OY]=subXY(0,HERO_SLOT);
+const HPATH2=[[HX,NLANE],[BRIDGE[0],NLANE],[BRIDGE[0],430]], HPATH3=[[BRIDGE[0],430],[BRIDGE[0],STREET_S-22],[OX,STREET_S-22]];
+const offLab=(op=1)=>T(526,752,S.lab.office,{size:30,wt:700,fill:C.mut,op});
+const fullChips=m=>SUB.map((b,s)=>subAllFull(s,m)?chip(b.x,646,S.lab.full,C.green,{size:30,h:44,bgop:.28}):'').join('');
+// shot 6's rider: steps off at x 560, walks left along station 1's rack and stops above dock 3, the one dock he checks
+const RIDER_END=slotXY(BL[0],2)[0], CHECK=slotXY(BL[0],2), RY=298;
+// the one checked dock's highlight (k: 0 -> 1 as he looks); shot 7 opens on its end state (k = 1) and fades it out
+const checkHL=(k,op=1)=>{const [sx,sy]=CHECK;return k<=0||op<=0?'':G(R(sx-SD.w/2-6,sy-SD.h/2-6,SD.w+12,SD.h+12,{r:9,fill:C.amber,op:.25*(1-k*.4)})+R(sx-SD.w/2-6,sy-SD.h/2-6,SD.w+12,SD.h+12,{r:9,fill:'none',stroke:C.amber,sw:3,op:1-k*.3}),'',op)};
+// the thought bubble over the rider: two dots and an outline bike (the bike he is looking for)
+const thought=(rx,ry,op)=>G(`<circle cx="${rx-20}" cy="${ry-48}" r="5" fill="${C.ink}"/><circle cx="${rx-38}" cy="${ry-66}" r="8" fill="${C.ink}"/>`+`<ellipse cx="${rx-100}" cy="${ry-105}" rx="78" ry="52" fill="${C.panel}" stroke="${C.ink}" stroke-width="3"/>`+bike(rx-100,ry-89,.62,{col:C.mut,dash:true}),'',op);
+// shot 6's camera, as a function so shot 7 can open on exactly its last frame
+const cam6=u=>{const k=eio(p(u,0,7.5));return [L(2.25,2.32,k),L(340,336,k),282]};
+
+// 1  7:00, the city from above: every station dock holds a bike; the office docks across the river have room; a train runs
+shot(u=>{const m=0;let g=city()+officeDocks(m)+stationDocks(m);
+ g+=train(L(-300,2350,p(u,0.2,7.5)),RAIL)+stations(m,{u});
+ g+=G(T(stX(BL[1])-90,276,S.lab.docks,{size:34,wt:700,a:'middle'}),'',eo(p(u,2.0,2.6)));
+ const k=eo(p(u,4.6,5.2));g+=G(R(1220,238,LEG_W,52,{r:12,fill:C.bg,stroke:C.line,sw:2,op:.94})+slot(1248,264,'f')+T(1276,274,S.lab.legend,{size:27,wt:700}),'',k);
+ g+=G(offLab(),'',eo(p(u,7.4,8.0)));
+ clock(m);return G(g,cam(L(1,1.04,eio(p(u,0,12.8))),956,465))+cap(S.cap.open,u,0.6)});
+
+// 2  7:05-7:12, close on station 1: a train pulls in, a rider steps off below it, takes the orange bike and rides to the bridge street
+shot(u=>{const m=L(5,12,p(u,0.4,5.0)),taken=m>=TRIPS[0].dep;let g=city()+stationDocks(m,{hero:!taken});
+ g+=train(L(-700,650,eo(p(u,0,1.6))),RAIL)+stations(m,{u,only:[0]});
+ const off=p(u,1.6,1.9);
+ if(!taken){const w=eio(p(u,1.7,2.35));g+=person(HX,L(236,RY,w),C.ink,off,1.3)}
+ [[440,-160],[800,1150]].forEach(([sx,ex],j)=>{const w=eio(p(u,1.8+j*.2,5.0));g+=person(L(sx,ex,w),238,C.ink,off*(1-p(u,4.4,4.9)),1.2)});
+ if(!taken)g+=G(`<path d="M${HX+14} ${HY-16} L${HX+34} 300" stroke="#ffc27a" stroke-width="4" stroke-linecap="round"/>`
+  +`<text x="${HX+40}" y="290" font-size="34" font-weight="700" fill="#ffc27a" stroke="${C.bg}" stroke-width="6" paint-order="stroke">${S.lab.orange}</text>`,'',eo(p(u,0.5,1.0)));
+ if(taken){const f=eio(p(u,2.6,6.2)),[bx,by,fd]=along(HPATH2,f);g+=bike(bx,by,.5,{spin:f*22,rider:true,flip:fd<0})}
+ clock(m);return G(g,cam(L(1.6,1.66,eio(p(u,0,7.5))),L(410,420,eio(p(u,0,7.5))),L(300,310,eio(p(u,0,7.5)))))+cap(S.cap.take,u,0.6)});
+
+// 3  7:12-7:25, the orange bike rides down the bridge street, along the office street, and docks; then it is one more cream dot
+shot(u=>{const f=eio(p(u,0.3,5.0)),m=L(12,25,f),docked=f>=1;let g=city()+officeDocks(docked?25:m)+stationDocks(m);
+ if(!docked){const [x,y,fd]=along(HPATH3,f);g+=bike(x,y,.72,{spin:f*40,rider:true,flip:fd<0})}
+ else{const k=p(u,5.0,5.9);g+=`<circle cx="${OX}" cy="${OY}" r="${16+28*k}" fill="none" stroke="${C.gold}" stroke-width="4" opacity="${1-k}"/>`+`<circle cx="${OX}" cy="${OY}" r="${OD.dot+1.5}" fill="${C.gold}" opacity="${1-p(u,5.1,6.0)}"/>`}
+ g+=G(offLab(),'',eo(p(u,3.0,3.6)));
+ clock(m);return G(g,cam(L(1.15,1.2,f),560,L(535,540,f)))+cap(S.cap.ride,u,0.6)});
+
+// 4  7:25-8:40, from above: bikes keep leaving the station racks and riding to the office docks, which fill
+shot(u=>{const m=L(25,100,p(u,0.3,8.2));let g=city()+officeDocks(m)+stationDocks(m)+trips(m)+stations(m,{u});
+ g+=offLab()+fullChips(m);
+ clock(m,eo(p(u,0.2,0.7)));return G(g,cam(L(1,1.03,eio(p(u,0,8.8))),956,465))+cap(S.cap.rush,u,0.6)});
+
+// 5  8:40-9:00: the last bikes arrive; once the clock reads 9:00 the bracket draws and the count lands, then the caption
+shot(u=>{const m=L(100,120,p(u,0.2,2.4));if(u>=2.4&&totEmpty(m)!==40)throw new Error('count');
+ let g=city()+officeDocks(m)+stationDocks(m)+trips(m)+stations(m,{u})+offLab()+fullChips(m);
+ if(m>=120)g+=countMark(p(u,2.6,3.2),{lab:eo(p(u,3.0,3.5))});
+ g+=glows(.4*(.5+.5*Math.sin(u*3))*p(u,3.5,4.1));
+ clock(m,1-p(u,2.4,2.8));return G(g,cam(L(1,1.035,eio(p(u,0,8.5))),956,465))+cap(S.cap.count,u,3.7)});
+
+// 6  9:00, close on station 1: a rider steps off the train, walks along the rack, checks one dock and finds no bike.
+//    The camera frames station 1's whole rack (every dock empty) and stops short of station 2's rack (x < 734).
+shot(u=>{const m=120;let g=city()+stationDocks(m)+train(L(-700,650,eo(p(u,0,1.5))),RAIL)+stations(m,{u,only:[0]});
+ const vis=p(u,1.5,1.8);let rx,ry;
+ if(u<2.5){const w=eio(p(u,1.7,2.5));rx=560;ry=L(236,RY,w)}else{rx=L(560,RIDER_END,eio(p(u,2.5,4.4)));ry=RY}
+ g+=checkHL(p(u,4.4,5.0));
+ for(let j=0;j<3;j++){const sx=[470,600,640][j],w=eio(p(u,1.7+j*.12,4.6));g+=person(L(sx,j?1000:-120,w),238,C.ink,vis*(1-p(u,4.3,4.6)),1.2)}
+ g+=person(rx,ry,C.teal,vis,1.5);
+ const tb=eo(p(u,5.0,5.5));if(tb>0)g+=thought(rx,ry,tb);
+ clock(m);return G(g,cam(...cam6(u)))+cap(S.cap.rider,u,0.8)});
+
+// 7  9:00, the reveal: opens on shot 6's last frame (the rider at station 1's empty rack, thinking of a bike) and pulls
+//    back in one move to the whole city. The rider stays in frame; the office docks come into view and their "full" tags
+//    arrive as each block is fully on screen; the caption (it claims the pile-up) waits until both blocks are in view.
+//    No bracket and no count label here: the count was shot 5's; this shot only shows where the bikes went.
+// The camera interpolates the VISIBLE RECTANGLE (left, top, width) between the two framings, so every edge moves one way
+// only (nothing outside both framings is ever shown) and the rider, inside both, is inside every frame in between.
+const SC=1.1, VIEW=([s,fx,fy])=>{const w=1920/(SC*s);return [fx-960/(SC*s),fy-410/(SC*s),w]};   // stage: y 130..930, centre y 540
+const V0=VIEW(cam6(DD[5])), V1=VIEW([1,956,465]), PB=[0.2,3.0];
+const cam7=u=>{const k=eio(p(u,PB[0],PB[1])),l=L(V0[0],V1[0],k),t=L(V0[1],V1[1],k),w=L(V0[2],V1[2],k),s=1920/(SC*w);return [s,l+960/(SC*s),t+410/(SC*s)]};
+const onStage=(c,[x0,y0,x1,y1])=>{const [s,fx,fy]=c,a=[960+SC*s*(x0-fx),540+SC*s*(y0-fy)],b=[960+SC*s*(x1-fx),540+SC*s*(y1-fy)];return a[0]>=0&&b[0]<=1920&&a[1]>=130&&b[1]<=930};
+// an office block's docks plus its "full" tag above them, in world units
+const BLOCK=SUB.map(b=>[b.x,646,b.x+9*OD.dx+OD.w,b.y+2*OD.dy+OD.h]);
+const sweep7=[];for(let u=0;u<=DD[6]+1e-9;u+=0.02)sweep7.push(+u.toFixed(2));
+// the time each block is (and stays) fully on stage; its tag fades in from then; the caption waits for both, plus a beat
+const IN7=BLOCK.map(bx=>{const i=sweep7.findIndex((u,j)=>sweep7.slice(j).every(v=>onStage(cam7(v),bx)));if(i<0)throw new Error('shot 7: an office block never fully enters');return sweep7[i]});
+const CAP7=Math.max(...IN7)+0.2;
+// the self-checks for the reveal
+{const RB=[RIDER_END-16,RY-40,RIDER_END+16,RY+10];
+ if(sweep7.some(u=>!onStage(cam7(u),RB)))throw new Error('shot 7: the rider leaves the frame');
+ if(sweep7.some(u=>{const [l,t,w]=VIEW(cam7(u));return l<V0[0]-0.5||t<V1[1]-0.5||l+w>V1[0]+V1[2]+0.5||t+w*800/1920>V1[1]+V1[2]*800/1920+0.5}))throw new Error('shot 7: the pull-back shows past both framings');
+ const c0=cam7(0),c6=cam6(DD[5]);if(c0.some((v,i)=>Math.abs(v-c6[i])>1e-6))throw new Error('shot 7 must open on shot 6\'s last framing');
+ if(CAP7<Math.max(...IN7))throw new Error('shot 7: caption before the offices are on screen');
+ if(DD[6]-Math.max(PB[1],CAP7+0.6)<2)throw new Error('shot 7: caption holds under 2 s on the final wide frame')}
+shot(u=>{const m=120,tag=IN7.map(t=>eo(p(u,t,t+0.4)));let g=city()+officeDocks(m)+stationDocks(m)+train(L(650,2400,eio(p(u,0.8,5.5))),RAIL)+stations(m,{u});
+ g+=G(offLab(),'',tag[0])+SUB.map((b,s)=>G(chip(b.x,646,S.lab.full,C.green,{size:30,h:44,bgop:.28}),'',tag[s])).join('');
+ g+=checkHL(1,1-p(u,0.3,1.0));
+ g+=glows(.45*(.5+.5*Math.sin(u*3))*p(u,1.0,2.2));
+ g+=person(RIDER_END,RY,C.teal,1,1.5)+thought(RIDER_END,RY,1);
+ clock(m);return G(g,cam(...cam7(u)))+cap(S.cap.end,u,CAP7)});
+renderFrame(0);
+</script></body></html>
