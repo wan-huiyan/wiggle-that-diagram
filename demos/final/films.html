@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two data films</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3.5' y='6.5' width='25' height='19' rx='3.5' fill='%23fff3e2' stroke='%233a2a24' stroke-width='2.2' stroke-linejoin='round'/%3E%3Cpath d='M7.5 9.6v.2M7.5 15.9v.2M7.5 22.2v.2M24.5 9.6v.2M24.5 15.9v.2M24.5 22.2v.2' stroke='%233a2a24' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M13.4 11.6l6.4 4.3-6.3 4.5z' fill='%23e5533d' stroke='%23a8321f' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ef;--ink:#3a2a24;--muted:#6f5a4f;--line:#ead9c6;--accent:#e5533d;--card:#fffdf9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Outfit",-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 40px}
+h1{font-size:clamp(24px,4vw,34px);line-height:1.15;margin:0 0 6px}
+p.lead{margin:0 0 22px;color:var(--muted);max-width:66ch}
+section{margin:0 0 30px}
+h2{font-size:20px;margin:0 0 4px}
+section p{margin:0 0 10px;color:var(--muted);max-width:70ch}
+video{display:block;width:100%;height:auto;border-radius:14px;border:1.5px solid var(--line);background:#121826}
+.tag{display:inline-block;font-size:13px;color:var(--muted);border:1.5px solid var(--line);border-radius:999px;padding:2px 10px;margin-left:6px;vertical-align:2px}
+footer{color:var(--muted);font-size:14px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>Two data films <span class="tag">made-up figures</span></h1>
+<p class="lead">Silent, captioned films made with the long-film style of <a href="https://github.com/wan-huiyan/wiggle-that-diagram">wiggle-that-diagram</a>.
+Each number is drawn from the world's own things, and each film checks its own sums before it renders.</p>
+
+<section>
+<h2>Bike-share, 58 s</h2>
+<p>One orange bike rides from a train station to an office. By 9:00, 40 of the 60 station docks are empty and a rider finds no bike.</p>
+<video controls playsinline preload="metadata" poster="films/bike-share-poster.jpg" src="films/bike-share.mp4"
+  aria-label="Bike-share film: by 9:00 on a weekday, 40 of the 60 docks by three train stations are empty, and the office docks are full."></video>
+</section>
+
+<section>
+<h2>Library, 29 s</h2>
+<p>A branch closes in June. Loans rise 18% and 11% at the two nearest branches, and 2% at a farther one. One book spine is 1% of loans before June.</p>
+<video controls playsinline preload="metadata" poster="films/library-poster.jpg" src="films/library.mp4"
+  aria-label="Library film: after the Northgate branch closed, loans rose 18% at Branch A, 11% at Branch B and 2% at the farther Branch C."></video>
+</section>
+
+<footer>Sources: <a href="https://github.com/wan-huiyan/wiggle-that-diagram/tree/main/demos/films">demos/films</a> · the loop styles: <a href="./">one diagram, three ways</a></footer>
+</main>
+</body>
+</html>

@@ -326,7 +326,7 @@ example").
 
 ## Changelog
 
-- **1.7.0** (2026-11-26): lessons from building the two README demo films (four review rounds each). Step 1b gains
+- **1.7.0** (2026-11-26): lessons from building the two README demo films (five review rounds each). Step 1b gains
   two checks: every caption is true of the picture while it shows, and the things the film moves add up across shots,
   enforced by a self-check in the film. Claim only what the numbers measure, give a headline figure one comparison,
   and change the example data rather than the wording when the picture is false. A poster frame for README or slide

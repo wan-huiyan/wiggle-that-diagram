@@ -73,7 +73,7 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    bikes that leave must have free docks to arrive in, spines lit must match the figure beside them. Put the sums in
    the film as a self-check that throws (`if (left !== freeDocks) throw …`), then count the drawn things on stills
    from the MP4.
-   - Why (e, f): the README demo films went through four review rounds. Every round, a cold viewer counting the
+   - Why (e, f): the README demo films went through five review rounds. Every round, a cold viewer counting the
      drawn things found what the builder had not: 40 bikes leaving for 16 free office docks; "a rider finds no bike"
      beside 65 parked bikes; "its borrowers took the roads" over figures that only counted loans.
    - Why: in a cold test, one builder handed eight example figures put all eight on screen, wrote a "one sentence"

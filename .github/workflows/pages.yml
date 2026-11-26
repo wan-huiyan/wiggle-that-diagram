@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - "demos/final/**"
+      - "demos/films/*.mp4"
+      - "demos/films/*.jpg"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 permissions:
@@ -21,11 +23,12 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble site (the switcher page and the six self-contained films, at the site root)
+      - name: Assemble site (the switcher page, the six loop films and the films page at the root; the long films' MP4s and posters in films/)
         run: |
           set -euo pipefail
-          mkdir -p _site
+          mkdir -p _site/films
           cp demos/final/*.html _site/
+          cp demos/films/*.mp4 demos/films/*.jpg _site/films/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
