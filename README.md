@@ -47,6 +47,22 @@ worked example in `examples/loop-promo/`.
 - **Checks before the long render:** `render.py --per-shot` makes a contact sheet of every shot and lists any label
   the frame edge cuts.
 
+**Two data stories made with it** (made-up figures; click a preview for the full film):
+
+<table>
+<tr>
+<td width="50%"><a href="demos/films/bike-share.mp4"><img src="demos/films/bike-share.gif" alt="A city from above at 9:00 on a weekday: three train stations with rows of bike docks, most of station 1's docks empty outlines, and two blocks of office docks across a river tagged full. The caption reads: Bikes ride one way: offices fill, stations empty."/></a></td>
+<td width="50%"><a href="demos/films/library.mp4"><img src="demos/films/library.gif" alt="A closed library branch with a padlocked shutter beside three bookcases. Gold spines on the bottom shelf show the rise in loans since June: 18 at Branch A, 11 at Branch B, 2 at the farther Branch C. The caption reads: Loans rose most at the branches nearest Northgate."/></a></td>
+</tr>
+<tr>
+<td><b>Bike-share, 58 s.</b> One orange bike rides from a train station to an office; by 9:00, 40 of the 60 station docks are empty and a rider finds no bike.</td>
+<td><b>Library, 29 s.</b> A branch closes; loans rise 18% and 11% at the two nearest branches, and 2% at a farther one. One spine is 1% of loans before June.</td>
+</tr>
+</table>
+
+Each number is drawn from the world's own things (empty docks, gold book spines), and each film checks its own sums
+before it renders. Sources: [`demos/films/`](demos/films/).
+
 Start with `python3 scripts/style-d/new_film.py <folder>`; the method is in
 [`references/long-film.md`](plugins/wiggle-that-diagram/skills/wiggle-that-diagram/references/long-film.md).
 

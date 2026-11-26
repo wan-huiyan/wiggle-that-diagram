@@ -4,7 +4,7 @@ description: "Use when someone asks to animate an illustration in an HTML slide 
 metadata:
   author: "Huiyan Wan, built with Claude (Anthropic)"
   license: "MIT"
-  version: "1.6.0"
+  version: "1.7.0"
   created: "2026-11-05"
   base_skill: "huashu-art-motion 1.2.0"
 ---
@@ -257,7 +257,10 @@ conflict all agents raise (here: loop length).
   that is not bundled renders silently in a fallback (`render.py` now stops instead); a camera pan at the end of a
   shot crops the labels on the far side, so check the END still of every shot. A wiped-in caption shows half a
   sentence on any still (`setupFilm({capMode:'fade'})`); a count-up caught mid-shot reads as the result (hold the
-  final counts ≥ 2 s); picture text under 26 px was called too small for a room.
+  final counts ≥ 2 s); picture text under 26 px was called too small for a room. In a data film, a caption true of
+  the data but false of the picture on screen (a rider "finds no bike" beside parked bikes), and drawn things that do
+  not add up across shots (40 bikes leaving for 16 free docks), are what a cold viewer finds first: write the sums
+  into the film as a self-check that throws.
 
 ## Scripts
 
@@ -323,6 +326,12 @@ example").
 
 ## Changelog
 
+- **1.7.0** (2026-11-26): lessons from building the two README demo films (four review rounds each). Step 1b gains
+  two checks: every caption is true of the picture while it shows, and the things the film moves add up across shots,
+  enforced by a self-check in the film. Claim only what the numbers measure, give a headline figure one comparison,
+  and change the example data rather than the wording when the picture is false. A poster frame for README or slide
+  thumbnails (step 8). Four traps: a counter showing a value before anything lands, an ending that repeats an earlier
+  frame, a label in the row of figures, text size assumed instead of measured. Two demo films in the README.
 - **1.6.0** (2026-11-25): makes style D generic for data stories, after a cold test on two new subjects. Shapes are
   picked by what the idea does (a new table), and the two films' choices are labelled examples, not a menu. A new
   step 1b: one sentence with one claim, at most three numbers that each quote it, charts built from the world's own

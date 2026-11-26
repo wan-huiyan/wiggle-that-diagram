@@ -56,12 +56,26 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
      step 1's check; allow at most one such shot per film. A metaphor that has to carry exact values turns into a
      puzzle.
    - Show once where the numbers come from (a source line on the end card or in a shot's tag), so a viewer can ask.
+   - Claim only what the numbers measure. Loans counted at each branch say "loans rose there", not "borrowers moved
+     there"; a drawn crowd walking from one place to another makes the second claim even when no caption does. Give a
+     headline figure one comparison that tells the viewer what it means: a farther branch that barely changed, the same
+     week a year before.
+   - When the example data makes the picture false, change the example data, not the wording. A rider "finds no bike"
+     at a station whose back racks still hold 65 is false on screen whatever the caption says; one 20-dock rack that is
+     really empty makes it true.
    → Check: (a) the one sentence makes **one** claim; if it joins two findings with "and", "so" or a comma, pick one
    and move the other to the notes. (b) Make a table: number | the exact words of the sentence it supports, quoted |
    shot. A row whose quote is not part of the sentence is cut, however true. (c) At most three numbers carry the
    sentence; any other number appears only as a label inside one of their shots. A brief's list of facts is a list
    of candidates, not a shot list. (d) Look at every bar, fill and lit count against its value on a still, and use
-   the same count in every shot that shows it.
+   the same count in every shot that shows it. (e) Read each caption against the picture on screen while it shows:
+   every caption must be true of THAT picture, not of the data in general. (f) Things the film moves must add up:
+   bikes that leave must have free docks to arrive in, spines lit must match the figure beside them. Put the sums in
+   the film as a self-check that throws (`if (left !== freeDocks) throw …`), then count the drawn things on stills
+   from the MP4.
+   - Why (e, f): the README demo films went through four review rounds. Every round, a cold viewer counting the
+     drawn things found what the builder had not: 40 bikes leaving for 16 free office docks; "a rider finds no bike"
+     beside 65 parked bikes; "its borrowers took the roads" over figures that only counted loans.
    - Why: in a cold test, one builder handed eight example figures put all eight on screen, wrote a "one sentence"
      that chained three findings, and in its check wrote topics ("weekends differ") instead of words from the
      sentence; four of its twelve shots became stat panels outside its world, and a share drifted from 18% to 20%
@@ -205,6 +219,9 @@ step 9 and the section "A film about someone's data, shown in public"; it is sum
    writes `交付说明.md`), then append your own notes section after it (it rewrites the file), then `deliver.py --verify`.
    → Check: gate is green or yellow, and every yellow item is explained in the notes. A red on fast motion alone is the
    exception below.
+   - Pick a poster frame for anywhere the film is shown as one still (a README, a slide thumbnail): one frame that
+     holds the main finding with its caption fully on, pulled from the MP4 with `ffmpeg -ss <t> -i film.mp4
+     -frames:v 1 poster.png`. Note its time in the delivery notes.
    - A film that holds still for reading can go red on fast motion and still be the right film. The gate counts a frame
      pair as fast only when the whole frame's mean grey changes by 9 or more (12 fps, 320 wide), so on a dark frame
      with small elements a slow push or glide scores nothing. Worked example: lengthening shots for reading took it
@@ -297,6 +314,10 @@ has rules a promo does not. All of them came from the second build's reviews.
 | Caption wipes in | a still, a review frame or a paused screen shows half a sentence | `setupFilm({capMode:'fade'})` fades each caption in whole |
 | A morph's in-between state | a blank sheet between "notes" and "boat" reads as a glitch on a still | keep any featureless in-between under 0.5 s |
 | A count-up mid-shot | a reviewer reads the counts on a frame caught mid-climb as the result (they did not even add up to the list's total) | hold the final counts at least 2 s before the cut; say in the notes that the climb is animation |
+| A counter shows a value before anything has landed | a paused frame or thumbnail shows "+2%" on the branch that rose 18% | keep the number hidden until the first unit lands, then count in step with the units, never ahead of them |
+| The ending repeats an earlier frame | the last shot is shot 5's picture with a new caption; it ends like a slide | make the end a reveal (pull back from the last close-up to the whole picture) or cut it and end on the close-up |
+| A label sits in the row of figures | "closed in June" under one building, level with "+18% / +11% / +2%", reads as a fourth figure | put such labels on the thing they describe, away from the row of numbers |
+| Text size assumed, not measured | the header and disclaimer came out at about 20 px at 1080p | measure font size × screen scale on every text element at several times per shot; keep everything at or above the 26 px floor, header and disclaimer included |
 | The hero's label changes | a longer label overflows the hull in some shots only | make the shape grow to fit its label, and re-check the end still of every shot after any label change |
 | The gate counts cuts that are not there | a calm 7-shot film read as 11 hard cuts | note the true count in the delivery notes; it does not change the verdict |
 | Overlay drawn inside the camera | caption and map zoom and drift with the picture | draw them with `cap()` / `mini()`, which write to the overlay, never into the shot's returned SVG |
