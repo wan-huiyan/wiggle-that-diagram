@@ -3,12 +3,12 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-whiteboard.html"><img src="demos/expenses.gif" width="100%" alt="The whiteboard style at double speed: a pen draws a phone and three receipt cards (hotel $180, dinner $95, taxi $40), an expense policy box wired to each card, a coloured reason for each, a manager's Approved note, an expense report with a total of $275, and a Paid tick on the phone."/></a><br/><sub><b>Whiteboard</b>: hand-drawn, like someone explaining at a board · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-whiteboard.html">open live</a></sub></td>
-<td width="50%" align="center"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-diagram.html"><img src="demos/expenses-diagram.gif" width="100%" alt="The diagram-clip style at double speed: a phone with three receipts, then Hotel $180, Dinner $95 and Taxi $40 cards checked against a policy box, each given a green, amber or red reason, the amber dinner approved by a manager, and an expense report totalling $275. A six-step rail and a caption sit under the picture."/></a><br/><sub><b>Diagram clip</b>: a clean diagram, labels stay sharp · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-diagram.html">open live</a></sub></td>
+<td width="50%" align="center" valign="top"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-whiteboard.html"><img src="demos/gallery/whiteboard.gif" width="100%" alt="The whiteboard style at double speed: a pen draws a phone and three receipt cards (hotel $180, dinner $95, taxi $40), an expense policy box wired to each card, a coloured reason for each, a manager's Approved note, an expense report with a total of $275, and a Paid tick on the phone."/></a><br/><sub><b>Whiteboard</b>: hand-drawn, at a board · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-whiteboard.html">open live</a></sub></td>
+<td width="50%" align="center" valign="top"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-diagram.html"><img src="demos/gallery/diagram.gif" width="100%" alt="The diagram-clip style at double speed: a phone with three receipts, then Hotel $180, Dinner $95 and Taxi $40 cards checked against a policy box, each given a green, amber or red reason, the amber dinner approved by a manager, and an expense report totalling $275. A six-step rail and a caption sit under the picture."/></a><br/><sub><b>Diagram clip</b>: a clean diagram, labels stay sharp · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses-diagram.html">open live</a></sub></td>
 </tr>
 <tr>
-<td width="50%" align="center"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html"><img src="demos/expenses-live.gif" width="100%" alt="The live style, step 3 of 6: three receipt cards, Hotel $180, Dinner $95 and Taxi $40, get a coloured dot and a reason one after another: green Under the limit, amber Over the $60 meal limit, red No photo. The caption reads Each receipt gets a colour and a reason. Same receipt, same answer."/></a><br/><sub><b>Live</b>: SVG and GSAP, the whole six-step film is 23 KB · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html">open live</a></sub></td>
-<td width="50%" align="center"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html"><img src="demos/films/bike-share.gif" width="100%" alt="The long-film style: a city from above at 9:00 on a weekday, three train stations with rows of bike docks, station 1's docks all empty outlines, and two blocks of office docks across a river tagged full. The caption reads: Bikes ride one way: offices fill, stations empty."/></a><br/><sub><b>Long film</b>: a 1 to 3 minute silent film, rendered to MP4 · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html">watch</a></sub></td>
+<td width="50%" align="center" valign="top"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html"><img src="demos/gallery/live.gif" width="100%" alt="The live style, step 3 of 6: three receipt cards, Hotel $180, Dinner $95 and Taxi $40, get a coloured dot and a reason one after another: green Under the limit, amber Over the $60 meal limit, red No photo. The caption reads Each receipt gets a colour and a reason. Same receipt, same answer."/></a><br/><sub><b>Live</b>: SVG and GSAP, the whole six-step film is 23 KB · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/expenses.html">open live</a></sub></td>
+<td width="50%" align="center" valign="top"><a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html"><img src="demos/films/bike-share.gif" width="100%" alt="The long-film style: a city from above at 9:00 on a weekday, three train stations with rows of bike docks, station 1's docks all empty outlines, and two blocks of office docks across a river tagged full. The caption reads: Bikes ride one way: offices fill, stations empty."/></a><br/><sub><b>Long film</b>: a 1 to 3 minute silent film, rendered to MP4 · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html">watch</a></sub></td>
 </tr>
 </table>
 <p align="center"><sub>Every example is made up: an expense claim in the three loop styles (sped up 2×), and a bike-share data story as a film.</sub></p>
@@ -25,6 +25,8 @@
 > a captioned loop for your HTML slide deck or report, in three styles to pick from, or a 1 to 3 minute silent film
 > rendered to MP4.**
 
+<p align="center"><b><a href="#-install">Install</a></b> · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/">Watch the loops live</a> · <a href="https://wan-huiyan.github.io/wiggle-that-diagram/films.html">Watch the films</a></p>
+
 ## 🤔 Why it exists
 
 Most explainer animations are too fast to read: the picture moves on while you are still on the caption. This skill
@@ -35,16 +37,16 @@ One caption script feeds all three loop styles, so a switcher compares styles, n
 
 | | What | The specifics |
 |---|---|---|
-| 📖 | **Readable, not flashy** | Each step holds for at least `max(4.5 s, words/3 + 1.5 s)`, and `pace_check.py` fails any step shorter than its reading time |
+| 📖 | **Readable, not flashy** | Each step holds for at least `max(4.5 s, words/3 + 1.5 s)`, counting the caption and every newly drawn word; `pace_check.py` fails any step shorter than that |
 | 🔁 | **One story, three ways** | One `beats.json` caption script drives the diagram clip, the whiteboard and the live style |
-| 🎞️ | **Behaves inside a deck** | One self-contained file per loop in an `iframe srcdoc`: step rail, play/pause, reduced motion, and one gesture still moves one slide |
+| 🎞️ | **Behaves inside a deck** | Each loop drops into a slide as one self-contained file, with a step rail, play/pause and reduced motion; one swipe or key press still moves one slide |
 | 🎬 | **Films that count honestly** | The long film builds its charts from the scene's own objects (empty docks, gold book spines) and checks its own sums before it renders |
 | ✅ | **Checks that can fail** | A pacing gate, contract tests in real Chrome, edge-clipping checks, size budgets, and reviewers who check every word in the picture against the source |
 
-## 🎞️ The four styles
+## 🎞️ Three loop styles and a long film
 
-[**Watch the loops live →**](https://wan-huiyan.github.io/wiggle-that-diagram/) (two made-up examples, three styles each, with a switcher)
-· [**Watch the films →**](https://wan-huiyan.github.io/wiggle-that-diagram/films.html)
+Styles A to C are loops for a slide or report; D is a film. The live site has both loop examples in all three styles,
+with a switcher.
 
 | Style | Looks like | Made with | Watch: expense claim | Watch: pizza order |
 |---|---|---|---|---|
@@ -116,7 +118,7 @@ Film sources: [`demos/films/`](demos/films/).
 bash scripts/check.sh
 ```
 
-Runs on every push and pull request (the **tests** badge above), 10 checks: every shipped script parses (JavaScript,
+Runs on every push to `main` and every pull request (the **tests** badge above), 10 checks: every shipped script parses (JavaScript,
 Python, bash), the pacing checker passes on the example caption scripts, the live style rebuilds
 `demos/final/pizza.html` and `demos/final/expenses.html` byte for byte, the long-film example passes the pacing
 check on the words it actually draws, and the version agrees in all three places it is written. The browser
